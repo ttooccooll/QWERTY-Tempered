@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micron - Microtonal Synthesizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #14141f;
+      --primary: #ff6b35;
+      --secondary: #00d4aa;
+      --tertiary: #a855f7;
+      --text: #e8e8e8;
+      --text-muted: #6b7280;
+      --key-white: #2a2a3a;
+      --key-black: #1a1a24;
+      --border: #2a2a3a;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      background-image:
+        linear-gradient(rgba(255,107,53,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,53,0.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(255,107,53,0.4);
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .start-btn {
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 12px 32px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      transition: all 150ms ease-out;
+    }
+
+    .start-btn:hover {
+      box-shadow: 0 0 20px rgba(255,107,53,0.6);
+      transform: translateY(-2px);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-group {
+      background: var(--surface);
+      padding: 16px 20px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .control-group select,
+    .control-group input[type="number"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 14px;
+      border-radius: 4px;
+      min-width: 100px;
+    }
+
+    .control-group select:focus,
+    .control-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(255,107,53,0.3);
+    }
+
+    .scale-visualization {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .scale-visualization h3 {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .scale-bar {
+      display: flex;
+      gap: 2px;
+      height: 40px;
+    }
+
+    .scale-degree {
+      flex: 1;
+      background: var(--key-black);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 150ms ease-out;
+      position: relative;
+    }
+
+    .scale-degree.active {
+      background: var(--secondary);
+      box-shadow: 0 0 10px rgba(0,212,170,0.5);
+    }
+
+    .scale-degree:hover {
+      background: var(--key-white);
+    }
+
+    .scale-degree.active:hover {
+      background: var(--secondary);
+    }
+
+    .scale-degree .degree-label {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      color: var(--text-muted);
+    }
+
+    .keyboard {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .octave-display {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      min-height: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .piano {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+
+    .key-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .key-row:first-child {
+      margin-left: 40px;
+    }
+
+    .key-row:nth-child(2) {
+      margin-left: 20px;
+    }
+
+    .key-row:nth-child(3) {
+      margin-left: 0;
+    }
+
+    .key-row:nth-child(4) {
+      margin-left: 80px;
+    }
+
+    .sustain-key {
+      min-width: 280px;
+      width: 280px;
+    }
+
+    .modifier-key {
+      min-width: 36px;
+      width: 36px;
+    }
+
+    .key {
+      cursor: pointer;
+      transition: all 80ms ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      min-width: 36px;
+      height: 36px;
+      background: var(--key-white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .key:hover {
+      background: #3a3a4a;
+    }
+
+    .key.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(255,107,53,0.6);
+    }
+
+    .key.in-scale {
+      border-color: var(--secondary);
+    }
+
+    .key.in-scale:not(.active) {
+      background: #1f2a25;
+    }
+
+    .key-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .key.active .key-label {
+      color: var(--bg);
+    }
+
+    .key-extra {
+      font-size: 7px;
+      color: var(--tertiary);
+      margin-top: 2px;
+    }
+
+    .key.active .key-extra {
+      color: var(--bg);
+    }
+
+    .octave-gap {
+      width: 100%;
+      height: 0;
+    }
+
+    .envelope-controls {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .envelope-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .envelope-control label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .envelope-control input[type="range"] {
+      writing-mode: vertical-lr;
+      direction: rtl;
+      width: 8px;
+      height: 80px;
+      appearance: none;
+      background: var(--key-black);
+      border-radius: 4px;
+    }
+
+    .envelope-control input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .envelope-control .value {
+      font-size: 12px;
+      color: var(--secondary);
+    }
+
+    .oscillator-select {
+      display: flex;
+      gap: 8px;
+    }
+
+    .osc-btn {
+      background: var(--key-black);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 150ms ease-out;
+    }
+
+    .osc-btn:hover {
+      border-color: var(--text-muted);
+    }
+
+    .osc-btn.active {
+      background: var(--primary);
+      color: var(--bg);
+      border-color: var(--primary);
+    }
+
+    .active-notes {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      min-height: 60px;
+    }
+
+    .active-notes h3 {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .notes-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .note-tag {
+      background: var(--key-black);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .note-tag .note-name {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .note-tag .note-cents {
+      color: var(--text-muted);
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    .keyboard-hint {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .keyboard-hint kbd {
+      background: var(--key-black);
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .controls-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .control-group {
+        width: 100%;
+      }
+
+      .key {
+        min-width: 32px;
+        height: 60px;
+        padding: 6px 2px;
+      }
+
+      .key-label {
+        font-size: 8px;
+      }
+
+      .envelope-controls {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QWERTY Tempered</h1>
+    <p class="subtitle">26-Key Equal Tempered Keyboard</p>
+  </header>
+
+  <button class="start-btn" id="startBtn">Click to Start Audio</button>
+
+  <div class="main-panel hidden" id="mainPanel">
+    <div class="controls-row">
+      <div class="control-group">
+        <label>Base Note (Hz)</label>
+        <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01">
+      </div>
+
+      <div class="control-group">
+        <label>Master Volume</label>
+        <input type="range" id="volume" min="0" max="100" value="70">
+      </div>
+    </div>
+
+    <div class="keyboard">
+      <div class="octave-display" id="octaveDisplay"></div>
+      <div class="piano" id="piano"></div>
+    </div>
+
+    <div class="envelope-controls">
+      <div class="control-group">
+        <label>Oscillator</label>
+        <div class="oscillator-select">
+          <button class="osc-btn" data-type="sine">Sine</button>
+          <button class="osc-btn active" data-type="triangle">Tri</button>
+          <button class="osc-btn" data-type="sawtooth">Saw</button>
+          <button class="osc-btn" data-type="square">Sqr</button>
+        </div>
+      </div>
+
+      <div class="envelope-control">
+        <label>Attack</label>
+        <input type="range" id="attack" min="1" max="1000" value="50">
+        <span class="value" id="attackVal">50ms</span>
+      </div>
+
+      <div class="envelope-control">
+        <label>Decay</label>
+        <input type="range" id="decay" min="1" max="1000" value="200">
+        <span class="value" id="decayVal">200ms</span>
+      </div>
+
+      <div class="envelope-control">
+        <label>Sustain</label>
+        <input type="range" id="sustain" min="0" max="100" value="70">
+        <span class="value" id="sustainVal">70%</span>
+      </div>
+
+      <div class="envelope-control">
+        <label>Release</label>
+        <input type="range" id="release" min="1" max="1000" value="300">
+        <span class="value" id="releaseVal">300ms</span>
+      </div>
+    </div>
+
+    <div class="active-notes">
+      <h3>Active Notes</h3>
+      <div class="notes-display" id="notesDisplay">
+        <span class="note-tag" style="color: var(--text-muted);">No notes playing</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let audioContext = null;
+    let masterGain = null;
+    let activeVoices = new Map();
+    let oscType = 'triangle';
+    let isSustainPedalDown = false;
+    let octaveShift = 0;
+    let baseFreq = 130.81;
+    const settings = {
+      attack: 50,
+      decay: 200,
+      sustain: 70,
+      release: 300
+    };
+    let divisions = 12;
+    let isJustIntonation = false;
+    let activeScaleDegrees = new Set();
+    
+    const alphabeticalKeys = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
+    const keyLabels = {
+      'z': 'C3', 'x': 'C#3', 'c': 'D3', 'v': 'D#3', 'b': 'E3', 'n': 'F3', 'm': 'F#3',
+      'a': 'G3', 's': 'G#3', 'd': 'A3', 'f': 'A#3', 'g': 'B3', 'h': 'C4', 'j': 'C#4', 'k': 'D4', 'l': 'D#4',
+      'q': 'E4', 'w': 'F4', 'e': 'F#4', 'r': 'G4', 't': 'G#4', 'y': 'A4', 'u': 'A#4', 'i': 'B4', 'o': 'C5', 'p': 'C#5'
+    };
+
+    function updateOctaveDisplay() {
+      const display = document.getElementById('octaveDisplay');
+      if (octaveShift === 0) {
+        display.textContent = '';
+      } else if (octaveShift === 12) {
+        display.textContent = '+1 octave';
+      } else if (octaveShift === -12) {
+        display.textContent = '-1 octave';
+      } else if (octaveShift === 24) {
+        display.textContent = '+2 octaves';
+      }
+    }
+
+    const alphabeticalNoteNames = [];
+    for (let i = 0; i < 26; i++) {
+      const noteNum = (i / 25) * 12;
+      const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const noteName = noteNames[Math.floor(noteNum) % 12];
+      const octaveNum = 3 + Math.floor(noteNum / 12);
+      alphabeticalNoteNames.push(noteName + octaveNum);
+    }
+
+    function initAudio() {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioContext.createGain();
+      masterGain.gain.value = 0.7;
+      masterGain.connect(audioContext.destination);
+    }
+
+    function getFrequency(noteIndex) {
+      return baseFreq * Math.pow(2, (noteIndex + octaveShift) / 25);
+    }
+
+    function playNote(noteIndex) {
+      if (!audioContext || activeVoices.has(noteIndex)) return;
+
+      const freq = getFrequency(noteIndex);
+      const now = audioContext.currentTime;
+
+      const osc = audioContext.createOscillator();
+      osc.type = oscType;
+      osc.frequency.value = freq;
+
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 0;
+
+      osc.connect(gainNode);
+      gainNode.connect(masterGain);
+
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(1, now + settings.attack / 1000);
+      gainNode.gain.linearRampToValueAtTime(
+        settings.sustain / 100,
+        now + (settings.attack + settings.decay) / 1000
+      );
+
+      osc.start(now);
+
+      activeVoices.set(noteIndex, { osc, gainNode, freq });
+      updateActiveNotesDisplay();
+    }
+
+    function stopNote(noteIndex) {
+      if (!audioContext || !activeVoices.has(noteIndex)) return;
+
+      if (isSustainPedalDown) {
+        return;
+      }
+
+      const { osc, gainNode } = activeVoices.get(noteIndex);
+      const now = audioContext.currentTime;
+
+      gainNode.gain.cancelScheduledValues(now);
+      gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+      gainNode.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+
+      setTimeout(() => {
+        osc.stop();
+        osc.disconnect();
+        gainNode.disconnect();
+      }, settings.release + 50);
+
+      activeVoices.delete(noteIndex);
+      updateActiveNotesDisplay();
+    }
+
+    function releaseAllNotes() {
+      const now = audioContext.currentTime;
+      activeVoices.forEach((voice, noteIndex) => {
+        voice.gainNode.gain.cancelScheduledValues(now);
+        voice.gainNode.gain.setValueAtTime(voice.gainNode.gain.value, now);
+        voice.gainNode.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+
+        setTimeout(() => {
+          voice.osc.stop();
+          voice.osc.disconnect();
+          voice.gainNode.disconnect();
+        }, settings.release + 50);
+      });
+      activeVoices.clear();
+      updateActiveNotesDisplay();
+    }
+
+    function updateActiveNotesDisplay() {
+      const display = document.getElementById('notesDisplay');
+      if (activeVoices.size === 0) {
+        display.innerHTML = '<span class="note-tag" style="color: var(--text-muted);">No notes playing</span>';
+        return;
+      }
+
+      display.innerHTML = Array.from(activeVoices.entries()).map(([noteIndex, voice]) => {
+        const exactFreq = voice.freq;
+        const cents = 1200 * Math.log2(exactFreq / baseFreq);
+        const name = alphabeticalNoteNames[noteIndex];
+
+        return `<span class="note-tag">
+          <span class="note-name">${name}</span>
+          <span class="note-cents">${cents.toFixed(1)}¢</span>
+        </span>`;
+      }).join('');
+    }
+
+    function buildKeyboard() {
+      const piano = document.getElementById('piano');
+      piano.innerHTML = '';
+
+      const totalKeys = 'zxcvbnmasdfghjklqwertyuip'.split('').reverse();
+      const rows = [
+        ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+        ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+        ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+      ];
+
+      rows.forEach((row, rowIndex) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'key-row';
+        
+        row.forEach(keyChar => {
+          const keyIndex = alphabeticalKeys.indexOf(keyChar);
+          const key = document.createElement('div');
+          key.className = 'key';
+          key.dataset.note = keyIndex;
+          key.dataset.key = keyChar;
+
+          const label = document.createElement('span');
+          label.className = 'key-label';
+          label.textContent = keyChar.toUpperCase();
+          key.appendChild(label);
+
+          const noteLabel = document.createElement('span');
+          noteLabel.className = 'key-extra';
+          noteLabel.textContent = alphabeticalNoteNames[keyIndex];
+          key.appendChild(noteLabel);
+
+          key.addEventListener('mousedown', () => playNote(keyIndex));
+          key.addEventListener('mouseup', () => stopNote(keyIndex));
+          key.addEventListener('mouseleave', () => stopNote(keyIndex));
+          key.addEventListener('touchstart', (e) => { e.preventDefault(); playNote(keyIndex); });
+          key.addEventListener('touchend', (e) => { e.preventDefault(); stopNote(keyIndex); });
+
+          rowDiv.appendChild(key);
+        });
+        
+        piano.appendChild(rowDiv);
+      });
+
+      const spaceRow = document.createElement('div');
+      spaceRow.className = 'key-row';
+      
+      const spaceKey = document.createElement('div');
+      spaceKey.className = 'key sustain-key';
+      spaceKey.id = 'sustainKey';
+      spaceKey.style.minWidth = '280px';
+      spaceKey.style.width = '280px';
+      spaceKey.dataset.key = ' ';
+      
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = 'SPACE';
+      spaceKey.appendChild(label);
+
+      const noteLabel = document.createElement('span');
+      noteLabel.className = 'key-extra';
+      noteLabel.textContent = 'SUSTAIN';
+      spaceKey.appendChild(noteLabel);
+
+      spaceKey.addEventListener('mousedown', () => {
+        isSustainPedalDown = true;
+        spaceKey.classList.add('active');
+      });
+      spaceKey.addEventListener('mouseup', () => {
+        isSustainPedalDown = false;
+        spaceKey.classList.remove('active');
+        releaseAllNotes();
+      });
+      spaceKey.addEventListener('mouseleave', () => {
+        if (isSustainPedalDown) {
+          isSustainPedalDown = false;
+          spaceKey.classList.remove('active');
+          releaseAllNotes();
+        }
+      });
+      
+      spaceRow.innerHTML = '';
+
+      const commaKey = createModifierKey(',', '▼', '-1', 'keyDown');
+      const periodKey = createModifierKey('.', '▲', '+1', 'keyUp');
+      
+      spaceRow.innerHTML = '';
+      spaceRow.appendChild(spaceKey);
+      spaceRow.appendChild(commaKey);
+      spaceRow.appendChild(periodKey);
+      
+      piano.appendChild(spaceRow);
+    }
+
+    function createModifierKey(keyChar, label, displayText, elementId) {
+      const key = document.createElement('div');
+      key.className = 'key modifier-key';
+      key.id = elementId;
+      key.dataset.key = keyChar;
+
+      const span = document.createElement('span');
+      span.className = 'key-label';
+      span.textContent = label;
+      key.appendChild(span);
+
+      const extra = document.createElement('span');
+      extra.className = 'key-extra';
+      extra.textContent = displayText;
+      key.appendChild(extra);
+
+      const handleModifierDown = () => {
+        if (keyChar === ',') {
+          octaveShift = -12;
+        } else if (keyChar === '.') {
+          octaveShift = 12;
+        }
+        key.classList.add('active');
+        updateOctaveDisplay();
+      };
+
+      const handleModifierUp = () => {
+        key.classList.remove('active');
+        octaveShift = 0;
+        updateOctaveDisplay();
+        releaseAllNotes();
+      };
+
+      key.addEventListener('mousedown', handleModifierDown);
+      key.addEventListener('mouseup', handleModifierUp);
+      key.addEventListener('mouseleave', handleModifierUp);
+      key.addEventListener('touchstart', (e) => { e.preventDefault(); handleModifierDown(); });
+      key.addEventListener('touchend', (e) => { e.preventDefault(); handleModifierUp(); });
+
+      return key;
+    }
+
+    document.getElementById('baseFreq').addEventListener('change', (e) => {
+      baseFreq = parseFloat(e.target.value);
+    });
+
+    document.getElementById('volume').addEventListener('input', (e) => {
+      if (masterGain) {
+        masterGain.gain.value = e.target.value / 100;
+      }
+    });
+
+    document.querySelectorAll('.osc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        oscType = btn.dataset.type;
+      });
+    });
+
+    ['attack', 'decay', 'sustain', 'release'].forEach(param => {
+      const input = document.getElementById(param);
+      const display = document.getElementById(param + 'Val');
+
+      input.addEventListener('input', () => {
+        settings[param] = parseInt(input.value);
+        if (param === 'sustain') {
+          display.textContent = settings[param] + '%';
+        } else {
+          display.textContent = settings[param] + 'ms';
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat) return;
+      if (!audioContext) return;
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        if (!isSustainPedalDown) {
+          isSustainPedalDown = true;
+          document.getElementById('sustainKey')?.classList.add('active');
+        }
+        return;
+      }
+
+      if (e.key === '.') {
+        octaveShift = 25;
+        updateOctaveDisplay();
+        document.getElementById('keyUp')?.classList.add('active');
+        return;
+      }
+
+      if (e.key === ',') {
+        octaveShift = -25;
+        updateOctaveDisplay();
+        document.getElementById('keyDown')?.classList.add('active');
+        return;
+      }
+
+      const keyChar = e.key.toLowerCase();
+      if (alphabeticalKeys.includes(keyChar)) {
+        const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
+        keyElement?.classList.add('active');
+        const keyIndex = alphabeticalKeys.indexOf(keyChar);
+        playNote(keyIndex);
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (!audioContext) return;
+
+      if (e.key === ' ') {
+        e.preventDefault();
+        releaseAllNotes();
+        isSustainPedalDown = false;
+        document.getElementById('sustainKey')?.classList.remove('active');
+        return;
+      }
+
+      if (e.key === '.' || e.key === ',') {
+        octaveShift = 0;
+        updateOctaveDisplay();
+        document.getElementById('keyUp')?.classList.remove('active');
+        document.getElementById('keyDown')?.classList.remove('active');
+        releaseAllNotes();
+        return;
+      }
+
+      const keyChar = e.key.toLowerCase();
+      if (alphabeticalKeys.includes(keyChar)) {
+        const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
+        keyElement?.classList.remove('active');
+        const keyIndex = alphabeticalKeys.indexOf(keyChar);
+        stopNote(keyIndex);
+      }
+    });
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+      initAudio();
+      document.getElementById('startBtn').classList.add('hidden');
+      document.getElementById('mainPanel').classList.remove('hidden');
+      buildKeyboard();
+    });
+  </script>
+</body>
+</html>
