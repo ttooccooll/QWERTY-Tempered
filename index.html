@@ -64,6 +64,23 @@
       text-transform: uppercase;
     }
 
+    .mobile-warning {
+      font-size: 9px;
+      color: var(--bg);
+      background: var(--tertiary);
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      display: none;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-warning {
+        display: block;
+      }
+    }
+
     .start-btn {
       background: var(--primary);
       color: var(--bg);
@@ -491,6 +508,7 @@
   <header>
     <h1>QWERTY Tempered</h1>
     <p class="subtitle">26-Key Equal Tempered Keyboard</p>
+    <p class="mobile-warning">Desktop Recommended</p>
   </header>
 
   <button class="start-btn" id="startBtn">Click to Start Audio</button>
