@@ -208,12 +208,35 @@
       color: var(--text-muted);
     }
 
+.key-display {
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .key-display .key-char {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--primary);
+      opacity: 1;
+      animation: fadeKey 2.5s ease-out forwards;
+    }
+
+    @keyframes fadeKey {
+      0% { opacity: 1; }
+      70% { opacity: 0.7; }
+      100% { opacity: 0; }
+    }
+
     .keyboard {
       background: var(--surface);
       padding: 24px;
       border-radius: 4px;
       border: 1px solid var(--border);
-      overflow-x: auto;
     }
 
     .octave-display {
@@ -527,6 +550,7 @@
     </div>
 
     <div class="keyboard">
+      <div class="key-display" id="keyDisplay"></div>
       <div class="piano" id="piano"></div>
     </div>
 
@@ -682,6 +706,26 @@
       } else if (octaveShift === 24) {
         display.textContent = '+2 octaves';
       }
+    }
+
+    let isShiftHeld = false;
+    function showKeyDisplay(char) {
+      const display = document.getElementById('keyDisplay');
+      const span = document.createElement('span');
+      span.className = 'key-char';
+      if (char === ' ') {
+        span.textContent = '\u00A0';
+      } else if (char === 'SHIFT') {
+        return;
+      } else {
+        span.textContent = isShiftHeld ? char.toUpperCase() : char.toLowerCase();
+      }
+      display.appendChild(span);
+      setTimeout(() => {
+        if (span.parentNode === display) {
+          display.removeChild(span);
+        }
+      }, 3000);
     }
 
     const alphabeticalNoteNames = [];
@@ -1077,11 +1121,13 @@
 
       if (e.key === 'Shift') {
         isAccent = true;
+        isShiftHeld = true;
         return;
       }
 
       if (e.key === ' ') {
         e.preventDefault();
+        showKeyDisplay(' ');
         if (!isSustainPedalDown) {
           isSustainPedalDown = true;
           document.getElementById('sustainKey')?.classList.add('active');
@@ -1114,6 +1160,7 @@
         keyElement?.classList.add('active');
         const keyIndex = alphabeticalKeys.indexOf(keyChar);
         playNote(keyIndex);
+        showKeyDisplay(keyChar.toUpperCase());
       }
     });
 
@@ -1122,6 +1169,7 @@
 
       if (e.key === 'Shift') {
         isAccent = false;
+        isShiftHeld = false;
         return;
       }
 
