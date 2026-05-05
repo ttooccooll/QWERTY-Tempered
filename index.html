@@ -348,6 +348,13 @@
       cursor: pointer;
     }
 
+    .horizontal-slider {
+      writing-mode: horizontal-tb !important;
+      direction: ltr !important;
+      width: 80px !important;
+      height: 8px !important;
+    }
+
     .envelope-control .value {
       font-size: 12px;
       color: var(--secondary);
@@ -355,6 +362,17 @@
 
     .oscillator-select {
       display: flex;
+      gap: 8px;
+    }
+
+    .oscillator-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .oscillator-stack {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
     }
 
@@ -497,13 +515,32 @@
 
     <div class="envelope-controls">
       <div class="control-group">
-        <label>Oscillator</label>
-        <div class="oscillator-select">
-          <button class="osc-btn" data-type="sine">Sine</button>
-          <button class="osc-btn active" data-type="triangle">Tri</button>
-          <button class="osc-btn" data-type="sawtooth">Saw</button>
-          <button class="osc-btn" data-type="square">Sqr</button>
+        <div class="oscillator-stack">
+          <div>
+            <label style="font-size:9px">OSC1</label>
+            <div class="oscillator-select">
+              <button class="osc-btn" data-type="sine">Sine</button>
+              <button class="osc-btn active" data-type="triangle">Tri</button>
+              <button class="osc-btn" data-type="sawtooth">Saw</button>
+              <button class="osc-btn" data-type="square">Sqr</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:9px">OSC2</label>
+            <div class="oscillator-select" id="oscSelect2">
+              <button class="osc-btn active" data-type="sine">Sine</button>
+              <button class="osc-btn" data-type="triangle">Tri</button>
+              <button class="osc-btn" data-type="sawtooth">Saw</button>
+              <button class="osc-btn" data-type="square">Sqr</button>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="envelope-control">
+        <label>Mix</label>
+        <input type="range" id="oscMix" min="0" max="100" value="0" class="horizontal-slider">
+        <span class="value" id="oscMixVal">0%</span>
       </div>
 
       <div class="envelope-control">
@@ -544,6 +581,8 @@
     let masterGain = null;
     let activeVoices = new Map();
     let oscType = 'triangle';
+    let oscType2 = 'sine';
+    let oscMix = 0;
     let isSustainPedalDown = false;
     let octaveShift = 0;
     let baseFreq = 130.81;
@@ -607,22 +646,36 @@
       osc.type = oscType;
       osc.frequency.value = freq;
 
+      const osc2 = audioContext.createOscillator();
+      osc2.type = oscType2;
+      osc2.frequency.value = freq;
+
       const gainNode = audioContext.createGain();
-      gainNode.gain.value = 0;
+      gainNode.gain.value = oscMix;
+
+      const gainNode2 = audioContext.createGain();
+      gainNode2.gain.value = 1 - oscMix;
+
+      const mixNode = audioContext.createGain();
+      mixNode.gain.value = 1;
 
       osc.connect(gainNode);
-      gainNode.connect(masterGain);
+      osc2.connect(gainNode2);
+      gainNode.connect(mixNode);
+      gainNode2.connect(mixNode);
+      mixNode.connect(masterGain);
 
-      gainNode.gain.setValueAtTime(0, now);
-      gainNode.gain.linearRampToValueAtTime(1, now + settings.attack / 1000);
-      gainNode.gain.linearRampToValueAtTime(
+      mixNode.gain.setValueAtTime(0, now);
+      mixNode.gain.linearRampToValueAtTime(1, now + settings.attack / 1000);
+      mixNode.gain.linearRampToValueAtTime(
         settings.sustain / 100,
         now + (settings.attack + settings.decay) / 1000
       );
 
       osc.start(now);
+      osc2.start(now);
 
-      activeVoices.set(noteIndex, { osc, gainNode, freq });
+      activeVoices.set(noteIndex, { osc, osc2, gainNode, gainNode2, freq });
       updateActiveNotesDisplay();
     }
 
@@ -633,17 +686,28 @@
         return;
       }
 
-      const { osc, gainNode } = activeVoices.get(noteIndex);
+      const { osc, osc2, gainNode, gainNode2 } = activeVoices.get(noteIndex);
       const now = audioContext.currentTime;
 
       gainNode.gain.cancelScheduledValues(now);
       gainNode.gain.setValueAtTime(gainNode.gain.value, now);
       gainNode.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
 
+      if (gainNode2) {
+        gainNode2.gain.cancelScheduledValues(now);
+        gainNode2.gain.setValueAtTime(gainNode2.gain.value, now);
+        gainNode2.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+      }
+
       setTimeout(() => {
         osc.stop();
         osc.disconnect();
         gainNode.disconnect();
+        if (osc2) {
+          osc2.stop();
+          osc2.disconnect();
+          gainNode2.disconnect();
+        }
       }, settings.release + 50);
 
       activeVoices.delete(noteIndex);
@@ -657,10 +721,23 @@
         voice.gainNode.gain.setValueAtTime(voice.gainNode.gain.value, now);
         voice.gainNode.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
 
+        if (voice.gainNode2) {
+          voice.gainNode2.gain.cancelScheduledValues(now);
+          voice.gainNode2.gain.setValueAtTime(voice.gainNode2.gain.value, now);
+          voice.gainNode2.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+        }
+
         setTimeout(() => {
           voice.osc.stop();
           voice.osc.disconnect();
           voice.gainNode.disconnect();
+          if (voice.osc2) {
+            voice.osc2.stop();
+            voice.osc2.disconnect();
+          }
+          if (voice.gainNode2) {
+            voice.gainNode2.disconnect();
+          }
         }, settings.release + 50);
       });
       activeVoices.clear();
@@ -834,10 +911,22 @@
 
     document.querySelectorAll('.osc-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        oscType = btn.dataset.type;
+        const select = btn.parentElement;
+        if (select.id === 'oscSelect2') {
+          select.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          oscType2 = btn.dataset.type;
+        } else {
+          select.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          oscType = btn.dataset.type;
+        }
       });
+    });
+
+    document.getElementById('oscMix').addEventListener('input', (e) => {
+      oscMix = e.target.value / 100;
+      document.getElementById('oscMixVal').textContent = e.target.value + '%';
     });
 
     ['attack', 'decay', 'sustain', 'release'].forEach(param => {

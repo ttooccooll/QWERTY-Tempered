@@ -3,7 +3,7 @@
 ## Project Overview
 - **Project Name**: QWERTY Tempered
 - **Type**: Web-based equal-tempered synthesizer
-- **Core Functionality**: A polyphonic synthesizer with 26 alphabetic keys spanning exactly one octave (equal tempered), with octave shift modifiers and sustain pedal
+- **Core Functionality**: A polyphonic synthesizer with 26 alphabetic keys spanning exactly one octave (equal tempered), dual oscillators with mix, octave shift modifiers, and sustain pedal
 - **Target Users**: Musicians and experimenters who want to play across an octave using the full keyboard
 
 ## UI/UX Specification
@@ -15,8 +15,9 @@
   2. Controls: Base frequency and volume
   3. Octave display (shows shift status)
   4. Keyboard: QWERTY layout with modifiers and sustain
-  5. Envelope controls: ADSR + oscillator type
-  6. Active notes display
+  5. Oscillator controls: Dual oscillators with mix
+  6. Envelope controls: ADSR
+  7. Active notes display
 
 ### Visual Design
 
@@ -50,10 +51,12 @@
 ### Core Features
 1. **26-Key Keyboard**: All alphabetic keys (Z to P) span exactly one octave
 2. **Equal Temperament**: All notes equally spaced (25 equal divisions per octave)
-3. **Octave Shift**: Hold comma (,) for -1 octave, period (.) for +1 octave
-4. **Sustain Pedal**: Hold spacebar to sustain notes
-5. **Sound Engine**: Web Audio API with ADSR envelope
-6. **Oscillator Types**: Sine, Triangle, Sawtooth, Square
+3. **Dual Oscillators**: Two independent oscillators with wave selection
+4. **Mix Control**: Blend between OSC1 (100%) and OSC2 (0%)
+5. **Octave Shift**: Hold comma (,) for -1 octave, period (.) for +1 octave
+6. **Sustain Pedal**: Hold spacebar to sustain notes
+7. **Sound Engine**: Web Audio API with ADSR envelope
+8. **Oscillator Types**: Sine, Triangle, Sawtooth, Square
 
 ### Keyboard Controls
 - A-Z: Play notes (Z = lowest, P = highest)
@@ -64,7 +67,8 @@
 ### User Interactions
 - Click or press key to play
 - Use mouse sliders for ADSR envelope
-- Select oscillator type
+- Select oscillator types for OSC1 and OSC2
+- Adjust mix to blend oscillators
 
 ### Edge Cases
 - Audio context requires user click to start
@@ -73,6 +77,8 @@
 ## Acceptance Criteria
 1. ✓ Z and P are exactly one octave apart
 2. ✓ All 26 notes equally spaced
-3. ✓ Octave shift works correctly
-4. ✓ Sustain pedal works
-5. ✓ ADSR envelope shapes sound
+3. ✓ Dual oscillators work independently
+4. ✓ Mix slider blends between oscillators
+5. ✓ Octave shift works correctly
+6. ✓ Sustain pedal works
+7. ✓ ADSR envelope shapes sound

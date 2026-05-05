@@ -1,11 +1,13 @@
 # QWERTY Tempered
 
-A web-based equal-tempered synthesizer using 26 alphabetic keys spanning exactly one octave.
+A web-based equal-tempered synthesizer using 26 alphabetic keys spanning exactly one octave with dual oscillators.
 
 ## Features
 
 - **26 Keys**: All letter keys (Z to P) span exactly one octave
 - **Equal Temperament**: All notes equally spaced
+- **Dual Oscillators**: Two independent oscillators (OSC1 + OSC2)
+- **Mix Control**: Blend between oscillators with slider
 - **Octave Shift**: Hold `.` for +1 octave, `,` for -1 octave
 - **Sustain**: Hold spacebar
 - **ADSR Envelope**: Adjustable attack, decay, sustain, release
@@ -15,8 +17,9 @@ A web-based equal-tempered synthesizer using 26 alphabetic keys spanning exactly
 
 1. Click "Click to Start Audio"
 2. Press keys to play notes (QWERTY layout)
-3. Use envelope sliders to shape sound
-4. Hold `.` or `,` to shift octave
+3. Select waveforms for OSC1 and OSC2
+4. Use Mix slider to blend between oscillators
+5. Use envelope sliders to shape sound
 
 ## Live Page
 
