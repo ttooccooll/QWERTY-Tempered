@@ -517,7 +517,7 @@
         <div class="oscillator-stack">
           <div>
             <label style="font-size:9px">OSC1</label>
-            <div class="oscillator-select">
+            <div class="oscillator-select" data-osc="1">
               <button class="osc-btn" data-type="sine">Sine</button>
               <button class="osc-btn active" data-type="triangle">Tri</button>
               <button class="osc-btn" data-type="sawtooth">Saw</button>
@@ -526,7 +526,7 @@
           </div>
           <div>
             <label style="font-size:9px">OSC2</label>
-            <div class="oscillator-select" id="oscSelect2">
+            <div class="oscillator-select" data-osc="2" id="oscSelect2">
               <button class="osc-btn active" data-type="sine">Sine</button>
               <button class="osc-btn" data-type="triangle">Tri</button>
               <button class="osc-btn" data-type="sawtooth">Saw</button>
@@ -605,9 +605,7 @@
       sustain: 70,
       release: 300
     };
-    let divisions = 12;
-    let isJustIntonation = false;
-    let activeScaleDegrees = new Set();
+    
     
     const alphabeticalKeys = ['z', 'x', 'c', 'v', 'b', 'n', 'm', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
     const keyLabels = {
@@ -773,7 +771,7 @@
           <span class="note-name">${name}</span>
           <span class="note-cents">${cents.toFixed(1)}¢</span>
         </span>`;
-      }).join('');
+}).join('');
     }
 
     function buildKeyboard() {
@@ -923,13 +921,12 @@
     document.querySelectorAll('.osc-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const select = btn.parentElement;
-        if (select.id === 'oscSelect2') {
-          select.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+        const oscNum = select.dataset.osc;
+        select.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (oscNum === '2') {
           oscType2 = btn.dataset.type;
         } else {
-          select.querySelectorAll('.osc-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
           oscType = btn.dataset.type;
         }
       });
