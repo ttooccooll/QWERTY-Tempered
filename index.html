@@ -577,12 +577,20 @@
         </div>
         <div style="flex:1">
           <h3>Controls</h3>
-          <div class="notes-display">
-            <span class="note-tag" style="color: var(--text-muted);">
-              SPACE = sustain<br>
-              , = -1 octave<br>
-              . = +1 octave
-            </span>
+          <div style="display:flex;gap:16px">
+            <div class="notes-display">
+              <span class="note-tag" style="color: var(--text-muted);">
+                SPACE = sustain<br>
+                , = -1 octave<br>
+                . = +1 octave
+              </span>
+            </div>
+            <div class="notes-display">
+              <span class="note-tag" style="color: var(--text-muted);">
+                SHIFT = accent<br>
+                ENTER = noise
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -597,6 +605,12 @@
     let oscType2 = 'sine';
     let oscMix = 0;
     let isSustainPedalDown = false;
+    let isSustainPedalDown = false;
+    let isAccent = false;
+    let isNoisePlaying = false;
+    let noiseNode = null;
+    let noiseGain = null;
+    let noiseBuffer = null;
     let octaveShift = 0;
     let baseFreq = 130.81;
     const settings = {
@@ -641,6 +655,43 @@
       masterGain = audioContext.createGain();
       masterGain.gain.value = 0.7;
       masterGain.connect(audioContext.destination);
+      const bufferSize = audioContext.sampleRate * 2;
+      noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+    }
+
+    function startNoise() {
+      if (!audioContext || isNoisePlaying || !noiseBuffer) return;
+      if (noiseNode) {
+        try { noiseNode.stop(); noiseNode.disconnect(); } catch(e) {}
+      }
+      noiseNode = audioContext.createBufferSource();
+      noiseNode.buffer = noiseBuffer;
+      noiseNode.loop = true;
+      noiseGain = audioContext.createGain();
+      noiseGain.gain.value = 0.3;
+      noiseNode.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noiseNode.start();
+      isNoisePlaying = true;
+    }
+
+    function stopNoise() {
+      if (!isNoisePlaying || !noiseNode || !noiseGain) return;
+      const gn = noiseGain;
+      const nn = noiseNode;
+      gn.gain.cancelScheduledValues(audioContext.currentTime);
+      gn.gain.setValueAtTime(gn.gain.value, audioContext.currentTime);
+      gn.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.1);
+      nn.stop(audioContext.currentTime + 0.15);
+      nn.disconnect();
+      gn.disconnect();
+      noiseNode = null;
+      noiseGain = null;
+      isNoisePlaying = false;
     }
 
     function getFrequency(noteIndex) {
@@ -676,11 +727,13 @@
       gainNode2.connect(mixNode);
       mixNode.connect(masterGain);
 
+      const accentMultiplier = isAccent ? 1.5 : 1;
+      const attackTime = isAccent ? settings.attack / 2000 : settings.attack / 1000;
       mixNode.gain.setValueAtTime(0, now);
-      mixNode.gain.linearRampToValueAtTime(1, now + settings.attack / 1000);
+      mixNode.gain.linearRampToValueAtTime(accentMultiplier, now + attackTime);
       mixNode.gain.linearRampToValueAtTime(
-        settings.sustain / 100,
-        now + (settings.attack + settings.decay) / 1000
+        (settings.sustain / 100) * accentMultiplier,
+        now + attackTime + settings.decay / 1000
       );
 
       osc.start(now);
@@ -955,6 +1008,11 @@
       if (e.repeat) return;
       if (!audioContext) return;
 
+      if (e.key === 'Shift') {
+        isAccent = true;
+        return;
+      }
+
       if (e.key === ' ') {
         e.preventDefault();
         if (!isSustainPedalDown) {
@@ -978,6 +1036,11 @@
         return;
       }
 
+      if (e.key === 'Enter') {
+        startNoise();
+        return;
+      }
+
       const keyChar = e.key.toLowerCase();
       if (alphabeticalKeys.includes(keyChar)) {
         const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
@@ -989,6 +1052,11 @@
 
     document.addEventListener('keyup', (e) => {
       if (!audioContext) return;
+
+      if (e.key === 'Shift') {
+        isAccent = false;
+        return;
+      }
 
       if (e.key === ' ') {
         e.preventDefault();
@@ -1004,6 +1072,11 @@
         document.getElementById('keyUp')?.classList.remove('active');
         document.getElementById('keyDown')?.classList.remove('active');
         releaseAllNotes();
+        return;
+      }
+
+      if (e.key === 'Enter') {
+        stopNoise();
         return;
       }
 
