@@ -554,10 +554,32 @@
         </div>
       </div>
 
-      <div class="envelope-control">
-        <label>Mix</label>
-        <input type="range" id="oscMix" min="0" max="100" value="0" class="horizontal-slider">
-        <span class="value" id="oscMixVal">0%</span>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="envelope-control">
+          <label>Mix</label>
+          <input type="range" id="oscMix" min="0" max="100" value="0" class="horizontal-slider">
+          <span class="value" id="oscMixVal">0%</span>
+        </div>
+
+        <div class="envelope-control">
+          <label>Detune</label>
+          <input type="range" id="oscDetune" min="0" max="50" value="0" class="horizontal-slider">
+          <span class="value" id="oscDetuneVal">0¢</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="envelope-control">
+          <label>Filter</label>
+          <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider">
+          <span class="value" id="filterCutoffVal">10kHz</span>
+        </div>
+
+        <div class="envelope-control">
+          <label>Resonance</label>
+          <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider">
+          <span class="value" id="filterQVal">1</span>
+        </div>
       </div>
 
       <div class="envelope-control">
@@ -622,6 +644,10 @@
     let oscType = 'triangle';
     let oscType2 = 'sine';
     let oscMix = 0;
+    let filterCutoff = 10000;
+    let filterQ = 1;
+    let oscDetune = 0;
+    let filterNode = null;
     let isSustainPedalDown = false;
     let isAccent = false;
     let isNoisePlaying = false;
@@ -669,9 +695,14 @@
 
     function initAudio() {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      filterNode = audioContext.createBiquadFilter();
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = 10000;
+      filterNode.Q.value = 1;
       masterGain = audioContext.createGain();
       masterGain.gain.value = 0.7;
-      masterGain.connect(audioContext.destination);
+      masterGain.connect(filterNode);
+      filterNode.connect(audioContext.destination);
       const bufferSize = audioContext.sampleRate * 2;
       noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
       const data = noiseBuffer.getChannelData(0);
@@ -728,6 +759,7 @@
       const osc2 = audioContext.createOscillator();
       osc2.type = oscType2;
       osc2.frequency.value = freq;
+      osc2.detune.value = oscDetune;
 
       const gainNode = audioContext.createGain();
       gainNode.gain.value = oscMix;
@@ -1005,6 +1037,24 @@
     document.getElementById('oscMix').addEventListener('input', (e) => {
       oscMix = e.target.value / 100;
       document.getElementById('oscMixVal').textContent = e.target.value + '%';
+    });
+
+    document.getElementById('filterCutoff').addEventListener('input', (e) => {
+      filterCutoff = parseInt(e.target.value);
+      filterNode.frequency.value = filterCutoff;
+      const display = filterCutoff >= 1000 ? (filterCutoff / 1000).toFixed(1) + 'kHz' : filterCutoff + 'Hz';
+      document.getElementById('filterCutoffVal').textContent = display;
+    });
+
+    document.getElementById('filterQ').addEventListener('input', (e) => {
+      filterQ = parseFloat(e.target.value);
+      filterNode.Q.value = filterQ;
+      document.getElementById('filterQVal').textContent = filterQ;
+    });
+
+    document.getElementById('oscDetune').addEventListener('input', (e) => {
+      oscDetune = parseInt(e.target.value);
+      document.getElementById('oscDetuneVal').textContent = oscDetune + '¢';
     });
 
     ['attack', 'decay', 'sustain', 'release'].forEach(param => {
