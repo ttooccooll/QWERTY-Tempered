@@ -575,6 +575,14 @@
               <button class="osc-btn" data-type="square">Sqr</button>
             </div>
           </div>
+          <div>
+            <label style="font-size:9px">ARP</label>
+            <div>
+              <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
+              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider" style="width:50px">
+              <span class="value" id="arpRateVal">150</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -628,24 +636,6 @@
         <label>Release</label>
         <input type="range" id="release" min="1" max="1000" value="300">
         <span class="value" id="releaseVal">300ms</span>
-      </div>
-
-      <div class="control-group">
-        <div class="oscillator-stack">
-          <div>
-            <label style="font-size:9px">Arpeggiator</label>
-            <div>
-              <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
-            </div>
-          </div>
-          <div>
-            <label style="font-size:9px">Rate</label>
-            <div>
-              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider">
-              <span class="value" id="arpRateVal">150ms</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
