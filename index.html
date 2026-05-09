@@ -629,6 +629,18 @@
         <input type="range" id="release" min="1" max="1000" value="300">
         <span class="value" id="releaseVal">300ms</span>
       </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="envelope-control">
+          <label>Arpeggiator</label>
+          <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
+        </div>
+        <div class="envelope-control">
+          <label>Rate</label>
+          <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider">
+          <span class="value" id="arpRateVal">150ms</span>
+        </div>
+      </div>
     </div>
 
     <div class="active-notes">
@@ -646,7 +658,8 @@
               <span class="note-tag" style="color: var(--text-muted);">
                 SPACE = sustain<br>
                 , = -1 octave<br>
-                . = +1 octave
+                . = +1 octave<br>
+                / = arpeggiator
               </span>
             </div>
             <div class="notes-display">
@@ -680,6 +693,12 @@
     let noiseBuffer = null;
     let octaveShift = 0;
     let baseFreq = 130.81;
+    let arpEnabled = false;
+    let arpRate = 150;
+    let arpInterval = null;
+    let arpHeldKeys = new Set();
+    let arpIndex = 0;
+
     const settings = {
       attack: 50,
       decay: 200,
@@ -784,6 +803,70 @@
       noiseNode = null;
       noiseGain = null;
       isNoisePlaying = false;
+    }
+
+    function startArpeggiator() {
+      if (arpEnabled) return;
+      arpEnabled = true;
+      document.getElementById('arpToggle').classList.add('active');
+      document.getElementById('arpToggle').textContent = 'ON';
+      releaseAllNotes();
+      arpIndex = 0;
+
+      for (let i = 0; i < 26; i++) {
+        const keyEl = document.querySelector(`.key[data-key="${alphabeticalKeys[i]}"]`);
+        if (keyEl && keyEl.classList.contains('active')) {
+          arpHeldKeys.add(i);
+        }
+      }
+
+      if (arpHeldKeys.size > 0) {
+        runArpeggiator();
+      }
+    }
+
+    function stopArpeggiator() {
+      if (!arpEnabled) return;
+      arpEnabled = false;
+      document.getElementById('arpToggle').classList.remove('active');
+      document.getElementById('arpToggle').textContent = 'OFF';
+      if (arpInterval) {
+        clearInterval(arpInterval);
+        arpInterval = null;
+      }
+      releaseAllNotes();
+    }
+
+    function runArpeggiator() {
+      if (!arpEnabled || arpHeldKeys.size === 0) {
+        releaseAllNotes();
+        return;
+      }
+      const sortedKeys = Array.from(arpHeldKeys).sort((a, b) => a - b);
+      const noteIndex = sortedKeys[arpIndex % sortedKeys.length];
+
+      for (const idx of activeVoices.keys()) {
+        const { osc, osc2, gainNode, gainNode2 } = activeVoices.get(idx);
+        const now = audioContext.currentTime;
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+        gainNode.gain.linearRampToValueAtTime(0, now + 0.02);
+        if (gainNode2) {
+          gainNode2.gain.cancelScheduledValues(now);
+          gainNode2.gain.setValueAtTime(gainNode2.gain.value, now);
+          gainNode2.gain.linearRampToValueAtTime(0, now + 0.02);
+        }
+        setTimeout(() => {
+          try { osc.stop(); osc.disconnect(); gainNode.disconnect(); } catch(e) {}
+          if (osc2) { try { osc2.stop(); osc2.disconnect(); } catch(e) {} }
+          if (gainNode2) { try { gainNode2.disconnect(); } catch(e) {} }
+        }, 30);
+        activeVoices.delete(idx);
+      }
+
+      playNote(noteIndex);
+      arpIndex++;
+      arpInterval = setTimeout(runArpeggiator, arpRate);
     }
 
     function getFrequency(noteIndex) {
@@ -952,11 +1035,39 @@
           noteLabel.textContent = alphabeticalNoteNames[keyIndex];
           key.appendChild(noteLabel);
 
-          key.addEventListener('mousedown', () => playNote(keyIndex));
-          key.addEventListener('mouseup', () => stopNote(keyIndex));
-          key.addEventListener('mouseleave', () => stopNote(keyIndex));
-          key.addEventListener('touchstart', (e) => { e.preventDefault(); playNote(keyIndex); });
-          key.addEventListener('touchend', (e) => { e.preventDefault(); stopNote(keyIndex); });
+          const keyNoteIndex = keyIndex;
+          const handleKeyDown = () => {
+            if (arpEnabled) {
+              arpHeldKeys.add(keyNoteIndex);
+              if (arpHeldKeys.size > 0) {
+                arpIndex = 0;
+                if (arpInterval) clearTimeout(arpInterval);
+                runArpeggiator();
+              }
+            } else {
+              playNote(keyNoteIndex);
+            }
+            key.classList.add('active');
+          };
+          const handleKeyUp = () => {
+            if (arpEnabled) {
+              arpHeldKeys.delete(keyNoteIndex);
+              if (arpHeldKeys.size === 0) {
+                releaseAllNotes();
+              } else {
+                arpIndex = 0;
+              }
+            } else {
+              stopNote(keyNoteIndex);
+            }
+            key.classList.remove('active');
+          };
+
+          key.addEventListener('mousedown', handleKeyDown);
+          key.addEventListener('mouseup', handleKeyUp);
+          key.addEventListener('mouseleave', handleKeyUp);
+          key.addEventListener('touchstart', (e) => { e.preventDefault(); handleKeyDown(); });
+          key.addEventListener('touchend', (e) => { e.preventDefault(); handleKeyUp(); });
 
           rowDiv.appendChild(key);
         });
@@ -1115,6 +1226,19 @@
       });
     });
 
+    document.getElementById('arpToggle').addEventListener('click', () => {
+      if (arpEnabled) {
+        stopArpeggiator();
+      } else {
+        startArpeggiator();
+      }
+    });
+
+    document.getElementById('arpRate').addEventListener('input', (e) => {
+      arpRate = parseInt(e.target.value);
+      document.getElementById('arpRateVal').textContent = arpRate + 'ms';
+    });
+
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return;
       if (!audioContext) return;
@@ -1154,12 +1278,29 @@
         return;
       }
 
+      if (e.key === '/') {
+        e.preventDefault();
+        if (arpEnabled) {
+          stopArpeggiator();
+        } else {
+          startArpeggiator();
+        }
+        return;
+      }
+
       const keyChar = e.key.toLowerCase();
       if (alphabeticalKeys.includes(keyChar)) {
-        const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
-        keyElement?.classList.add('active');
         const keyIndex = alphabeticalKeys.indexOf(keyChar);
-        playNote(keyIndex);
+        arpHeldKeys.add(keyIndex);
+        if (arpEnabled && arpHeldKeys.size > 0) {
+          arpIndex = 0;
+          if (arpInterval) clearTimeout(arpInterval);
+          runArpeggiator();
+        } else {
+          const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
+          keyElement?.classList.add('active');
+          playNote(keyIndex);
+        }
         showKeyDisplay(keyChar.toUpperCase());
       }
     });
@@ -1197,9 +1338,17 @@
 
       const keyChar = e.key.toLowerCase();
       if (alphabeticalKeys.includes(keyChar)) {
+        const keyIndex = alphabeticalKeys.indexOf(keyChar);
+        arpHeldKeys.delete(keyIndex);
+        if (arpEnabled) {
+          if (arpHeldKeys.size === 0) {
+            releaseAllNotes();
+          } else {
+            arpIndex = 0;
+          }
+        }
         const keyElement = document.querySelector(`.key[data-key="${keyChar}"]`);
         keyElement?.classList.remove('active');
-        const keyIndex = alphabeticalKeys.indexOf(keyChar);
         stopNote(keyIndex);
       }
     });
