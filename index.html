@@ -630,15 +630,21 @@
         <span class="value" id="releaseVal">300ms</span>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="envelope-control">
-          <label>Arpeggiator</label>
-          <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
-        </div>
-        <div class="envelope-control">
-          <label>Rate</label>
-          <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider">
-          <span class="value" id="arpRateVal">150ms</span>
+      <div class="control-group">
+        <div class="oscillator-stack">
+          <div>
+            <label style="font-size:9px">Arpeggiator</label>
+            <div>
+              <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:9px">Rate</label>
+            <div>
+              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider">
+              <span class="value" id="arpRateVal">150ms</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
