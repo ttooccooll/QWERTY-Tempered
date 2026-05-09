@@ -575,14 +575,6 @@
               <button class="osc-btn" data-type="square">Sqr</button>
             </div>
           </div>
-          <div>
-            <label style="font-size:9px">ARP</label>
-            <div>
-              <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
-              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider" style="width:50px">
-              <span class="value" id="arpRateVal">150</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -637,6 +629,12 @@
         <input type="range" id="release" min="1" max="1000" value="300">
         <span class="value" id="releaseVal">300ms</span>
       </div>
+
+      <div class="envelope-control">
+        <label>Arp Rate</label>
+        <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider">
+        <span class="value" id="arpRateVal">150ms</span>
+      </div>
     </div>
 
     <div class="active-notes">
@@ -654,8 +652,7 @@
               <span class="note-tag" style="color: var(--text-muted);">
                 SPACE = sustain<br>
                 , = -1 octave<br>
-                . = +1 octave<br>
-                / = arpeggiator
+                . = +1 octave
               </span>
             </div>
             <div class="notes-display">
