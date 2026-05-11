@@ -17,7 +17,7 @@
     :root {
       --bg: #1a1612;
       --surface: #252019;
-      --panel: #332e22;
+      --panel: linear-gradient(180deg, #3d3428 0%, #2d2418 50%, #3a3020 100%);
       --panel-border: #4a3f2e;
       --primary: #e8a935;
       --primary-glow: #f5c155;
@@ -44,7 +44,8 @@
       padding: 24px;
       background-image:
         radial-gradient(ellipse at 50% 0%, rgba(232,169,53,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(205,127,50,0.04) 0%, transparent 40%);
+        radial-gradient(ellipse at 80% 80%, rgba(205,127,50,0.04) 0%, transparent 40%),
+        repeating-linear-gradient(90deg, transparent 0px, transparent 2px, rgba(139,105,20,0.03) 2px, rgba(139,105,20,0.03) 4px);
     }
 
     header {
@@ -100,7 +101,7 @@
       letter-spacing: 3px;
       text-transform: uppercase;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 10px;
       margin-bottom: 24px;
       transition: all 150ms ease-out;
       box-shadow: 0 4px 0 var(--key-active-shadow), 0 4px 12px rgba(0,0,0,0.4);
@@ -138,7 +139,7 @@
     .control-group {
       background: var(--panel);
       padding: 14px 16px;
-      border-radius: 6px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.03),
@@ -178,7 +179,7 @@
       position: relative;
       background: var(--panel);
       padding: 24px 20px 20px;
-      border-radius: 6px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.03),
@@ -219,7 +220,7 @@
     .keyboard {
       background: var(--panel);
       padding: 18px;
-      border-radius: 6px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.03),
@@ -236,7 +237,7 @@
     .arpeggiator-panel {
       background: var(--panel);
       padding: 14px;
-      border-radius: 6px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       min-width: 160px;
       box-shadow: 
@@ -521,7 +522,7 @@
     .active-notes {
       background: var(--panel);
       padding: 14px;
-      border-radius: 6px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       min-height: 60px;
       box-shadow: 
@@ -587,11 +588,13 @@
       position: absolute;
       width: 10px;
       height: 10px;
-      background: linear-gradient(135deg, #5a4a38 0%, #2a2015 100%);
+      background: radial-gradient(circle at 30% 30%, #d4a84b 0%, #8b6914 50%, #5c4010 100%);
       border-radius: 50%;
+      border: 1px solid #6b5020;
       box-shadow: 
-        inset 0 1px 2px rgba(0,0,0,0.5),
-        0 1px 0 rgba(255,255,255,0.05);
+        inset 0 1px 2px rgba(255,255,255,0.3),
+        inset 0 -1px 2px rgba(0,0,0,0.3),
+        0 1px 2px rgba(0,0,0,0.3);
       z-index: 2;
     }
 
@@ -600,10 +603,11 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 6px;
+      width: 5px;
       height: 1px;
-      background: #1a1510;
+      background: #4a3508;
       transform: translate(-50%, -50%) rotate(45deg);
+      box-shadow: 0 0 1px rgba(0,0,0,0.5);
     }
 
     .screw-tl { top: 6px; left: 6px; }
@@ -635,12 +639,12 @@
       position: absolute;
       top: 8px;
       left: 50%;
-      width: 2px;
+      width: 3px;
       height: 12px;
-      background: var(--primary);
+      background: linear-gradient(180deg, #f0c860 0%, #c49830 100%);
       border-radius: 1px;
       transform: translateX(-50%);
-      box-shadow: 0 0 4px var(--primary);
+      box-shadow: 0 0 6px rgba(196,152,48,0.6);
     }
 
     .knob-container {

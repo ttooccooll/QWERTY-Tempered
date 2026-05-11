@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QWERTY Tempered - 70s Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #1a1612;
+      --surface: #252019;
+      --panel: #332e22;
+      --panel-border: #4a3f2e;
+      --panel-light: #3d3428;
+      --primary: #e8a935;
+      --primary-glow: #f5c155;
+      --secondary: #cd7f32;
+      --tertiary: #8b6914;
+      --text: #f5f0e1;
+      --text-muted: #a89878;
+      --text-dark: #2d2418;
+      --key-cream: #f5f0e1;
+      --key-cream-shadow: #c9c0ab;
+      --key-cream-highlight: #fffcf5;
+      --key-active: #e8a935;
+      --key-active-shadow: #c48a1f;
+      --border: #4a3f2e;
+      --led-off: #3a3020;
+      --led-on: #f5c155;
+      --wood: #5c4033;
+    }
+
+    @font-face {
+      font-family: 'Vintage Labels';
+      src: local('Courier New');
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(232,169,53,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(205,127,50,0.04) 0%, transparent 40%);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 60px;
+      background: linear-gradient(180deg, rgba(92,64,51,0.3) 0%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(10px);
+    }
+
+    h1 {
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: 6px;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      text-shadow: 
+        0 0 40px rgba(232,169,53,0.6),
+        0 2px 0 rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    h1::after {
+      content: '×26';
+      font-size: 14px;
+      position: absolute;
+      top: -5px;
+      right: -40px;
+      color: var(--secondary);
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+    }
+
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 920px;
+    }
+
+    .panel {
+      background: var(--panel);
+      padding: 16px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 
+        0 4px 20px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        inset 0 -1px 0 rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .panel-label {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--panel);
+      padding: 2px 12px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--secondary);
+      font-weight: 600;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      z-index: 1;
+    }
+
+    .screw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(135deg, #5a4a38 0%, #2a2015 100%);
+      border-radius: 50%;
+      box-shadow: 
+        inset 0 1px 2px rgba(0,0,0,0.5),
+        0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .screw::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 1px;
+      background: #1a1510;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .screw-tl { top: 6px; left: 6px; }
+    .screw-tr { top: 6px; right: 6px; }
+    .screw-bl { bottom: 6px; left: 6px; }
+    .screw-br { bottom: 6px; right: 6px; }
+
+    .keyboard-arpeggiator-container {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .keyboard {
+      flex: 1;
+      background: var(--panel);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 
+        0 4px 20px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .piano {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+
+    .key-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .key-row:nth-child(1) { margin-left: 48px; }
+    .key-row:nth-child(2) { margin-left: 24px; }
+
+    .key-row:last-child {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .key {
+      cursor: pointer;
+      transition: all 60ms ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 4px 0 6px 0;
+      min-width: 38px;
+      height: 52px;
+      background: linear-gradient(180deg, var(--key-cream-highlight) 0%, var(--key-cream) 30%, var(--key-cream-shadow) 100%);
+      border: 1px solid var(--key-cream-shadow);
+      border-radius: 4px 4px 3px 3px;
+      color: var(--text-dark);
+      box-shadow: 
+        0 4px 0 var(--key-cream-shadow),
+        0 4px 8px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -2px 0 rgba(0,0,0,0.05);
+    }
+
+    .key:hover {
+      background: linear-gradient(180deg, #fffcf5 0%, #faf5e8 30%, var(--key-cream) 100%);
+    }
+
+    .key.active {
+      background: linear-gradient(180deg, var(--primary-glow) 0%, var(--primary) 30%, var(--key-active-shadow) 100%);
+      border-color: var(--key-active-shadow);
+      box-shadow: 
+        0 2px 0 var(--key-active-shadow),
+        0 0 20px rgba(232,169,53,0.7),
+        0 0 40px rgba(232,169,53,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      transform: translateY(2px);
+      color: var(--text-dark);
+    }
+
+    .key-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 1px;
+    }
+
+    .key.active .key-label {
+      color: var(--text-dark);
+    }
+
+    .key-extra {
+      font-size: 7px;
+      color: var(--secondary);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .key.active .key-extra {
+      color: #4a3510;
+    }
+
+    .sustain-key {
+      min-width: 260px;
+      width: 260px;
+      height: 44px;
+    }
+
+    .modifier-key {
+      min-width: 40px;
+      height: 44px;
+    }
+
+    .arpeggiator-panel {
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .arp-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .led {
+      width: 10px;
+      height: 10px;
+      background: var(--led-off);
+      border-radius: 50%;
+      border: 1px solid #2a2015;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+      transition: all 150ms;
+    }
+
+    .led.on {
+      background: var(--led-on);
+      box-shadow: 
+        0 0 8px var(--led-on),
+        0 0 16px rgba(245,193,85,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .osc-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 10px;
+      font-family: inherit;
+      font-size: 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 150ms ease-out;
+      font-weight: 500;
+    }
+
+    .osc-btn:hover {
+      border-color: var(--secondary);
+      color: var(--text);
+    }
+
+    .osc-btn.active {
+      background: var(--primary);
+      color: var(--text-dark);
+      border-color: var(--primary);
+      font-weight: 700;
+      box-shadow: 
+        0 0 12px rgba(232,169,53,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .oscillator-select {
+      display: flex;
+      gap: 2px;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      min-width: 32px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .horizontal-slider {
+      width: 70px;
+      height: 6px;
+      appearance: none;
+      background: var(--bg);
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .horizontal-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
+      border-radius: 50%;
+      border: 2px solid var(--key-cream);
+      cursor: pointer;
+      box-shadow: 
+        0 0 8px rgba(232,169,53,0.6),
+        0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .slider-value {
+      font-size: 10px;
+      color: var(--secondary);
+      font-weight: 600;
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .osc-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .osc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .osc-label {
+      font-size: 9px;
+      width: 36px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .envelope-controls {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 8px 0;
+    }
+
+    .envelope-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .envelope-control label {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .envelope-control input[type="range"] {
+      writing-mode: vertical-lr;
+      direction: rtl;
+      width: 6px;
+      height: 70px;
+      appearance: none;
+      background: var(--bg);
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .envelope-control input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
+      border-radius: 50%;
+      border: 2px solid var(--key-cream);
+      cursor: pointer;
+      box-shadow: 
+        0 0 8px rgba(232,169,53,0.6),
+        0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .value {
+      font-size: 10px;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .active-notes {
+      display: flex;
+      gap: 24px;
+    }
+
+    .notes-section {
+      flex: 1;
+    }
+
+    .notes-section h3 {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .note-tag {
+      background: var(--surface);
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 10px;
+      border: 1px solid var(--border);
+      display: inline-block;
+      margin: 2px;
+    }
+
+    .note-tag .note-name {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .note-tag .note-cents {
+      color: var(--text-muted);
+      font-size: 8px;
+      margin-left: 4px;
+    }
+
+    .controls-help {
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .knob {
+      width: 44px;
+      height: 44px;
+      background: conic-gradient(from 225deg, #1a1510 0%, var(--panel) 25%, #3a3025 50%, var(--panel) 75%, #1a1510 100%);
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      box-shadow: 
+        0 3px 8px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(0,0,0,0.3),
+        inset 0 -1px 0 rgba(255,255,255,0.03);
+      position: relative;
+    }
+
+    .knob::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 2px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 1px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 4px var(--primary);
+    }
+
+    .knob-label {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .knob-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bottom-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-section, .envelope-section {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 16px; }
+      h1 { font-size: 22px; }
+      h1::after { display: none; }
+      .keyboard-arpeggiator-container { flex-direction: column; }
+      .controls-row { flex-direction: column; align-items: stretch; }
+      .control-group { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QWERTY Tempered</h1>
+    <p class="subtitle">26-Key Equal Tempered Keyboard</p>
+  </header>
+
+  <div class="main-panel">
+    <div class="panel" style="padding: 24px 20px 20px;">
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+      
+      <div class="keyboard-arpeggiator-container">
+        <div class="keyboard">
+          <div class="piano">
+            <div class="key-row">
+              <div class="key active"><span class="key-label">Q</span><span class="key-extra">E4</span></div>
+              <div class="key"><span class="key-label">W</span><span class="key-extra">F4</span></div>
+              <div class="key"><span class="key-label">E</span><span class="key-extra">F#4</span></div>
+              <div class="key"><span class="key-label">R</span><span class="key-extra">G4</span></div>
+              <div class="key"><span class="key-label">T</span><span class="key-extra">G#4</span></div>
+              <div class="key"><span class="key-label">Y</span><span class="key-extra">A4</span></div>
+              <div class="key"><span class="key-label">U</span><span class="key-extra">A#4</span></div>
+              <div class="key"><span class="key-label">I</span><span class="key-extra">B4</span></div>
+              <div class="key"><span class="key-label">O</span><span class="key-extra">C5</span></div>
+              <div class="key"><span class="key-label">P</span><span class="key-extra">C#5</span></div>
+            </div>
+            <div class="key-row">
+              <div class="key"><span class="key-label">A</span><span class="key-extra">G3</span></div>
+              <div class="key"><span class="key-label">S</span><span class="key-extra">G#3</span></div>
+              <div class="key"><span class="key-label">D</span><span class="key-extra">A3</span></div>
+              <div class="key"><span class="key-label">F</span><span class="key-extra">A#3</span></div>
+              <div class="key"><span class="key-label">G</span><span class="key-extra">B3</span></div>
+              <div class="key active"><span class="key-label">H</span><span class="key-extra">C4</span></div>
+              <div class="key"><span class="key-label">J</span><span class="key-extra">C#4</span></div>
+              <div class="key"><span class="key-label">K</span><span class="key-extra">D4</span></div>
+              <div class="key"><span class="key-label">L</span><span class="key-extra">D#4</span></div>
+            </div>
+            <div class="key-row">
+              <div class="key"><span class="key-label">Z</span><span class="key-extra">C3</span></div>
+              <div class="key"><span class="key-label">X</span><span class="key-extra">C#3</span></div>
+              <div class="key"><span class="key-label">C</span><span class="key-extra">D3</span></div>
+              <div class="key"><span class="key-label">V</span><span class="key-extra">D#3</span></div>
+              <div class="key"><span class="key-label">B</span><span class="key-extra">E3</span></div>
+              <div class="key"><span class="key-label">N</span><span class="key-extra">F3</span></div>
+              <div class="key"><span class="key-label">M</span><span class="key-extra">F#3</span></div>
+            </div>
+            <div class="key-row">
+              <div class="key modifier-key"><span class="key-label">▼</span><span class="key-extra">−1</span></div>
+              <div class="key sustain-key"><span class="key-label">SPACE</span><span class="key-extra">SUSTAIN</span></div>
+              <div class="key modifier-key"><span class="key-label">▲</span><span class="key-extra">+1</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arpeggiator-panel panel" style="padding: 16px;">
+          <div class="screw screw-tl" style="width:8px;height:8px;"></div>
+          <div class="screw screw-tr" style="width:8px;height:8px;"></div>
+          <div class="screw screw-bl" style="width:8px;height:8px;"></div>
+          <div class="screw screw-br" style="width:8px;height:8px;"></div>
+          
+          <div class="arp-header">
+            <div class="led on"></div>
+            <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--secondary);font-weight:600;">Arpeggiator</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+            <div class="oscillator-select">
+              <button class="osc-btn active">UP</button>
+              <button class="osc-btn">DN</button>
+              <button class="osc-btn">UD</button>
+              <button class="osc-btn">RND</button>
+            </div>
+            <div class="oscillator-select">
+              <button class="osc-btn active">0</button>
+              <button class="osc-btn">+1</button>
+              <button class="osc-btn">−1</button>
+              <button class="osc-btn">±1</button>
+            </div>
+            <div class="slider-row" style="margin-top:4px;">
+              <span class="slider-label">Rate</span>
+              <input type="range" class="horizontal-slider" value="60">
+              <span class="slider-value">150ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="panel-label">Oscillators</span>
+      <div class="screw screw-tl" style="width:8px;height:8px;"></div>
+      <div class="screw screw-tr" style="width:8px;height:8px;"></div>
+      
+      <div class="controls-row" style="padding-top:8px;">
+        <div class="osc-group">
+          <div class="osc-row">
+            <span class="osc-label">OSC 1</span>
+            <div class="oscillator-select">
+              <button class="osc-btn">SIN</button>
+              <button class="osc-btn">TRI</button>
+              <button class="osc-btn active">SAW</button>
+              <button class="osc-btn">SQR</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Mix</span>
+            <input type="range" class="horizontal-slider" value="80">
+            <span class="slider-value">80%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Detune</span>
+            <input type="range" class="horizontal-slider" value="10">
+            <span class="slider-value">+10¢</span>
+          </div>
+        </div>
+
+        <div class="osc-group">
+          <div class="osc-row">
+            <span class="osc-label">OSC 2</span>
+            <div class="oscillator-select">
+              <button class="osc-btn">SIN</button>
+              <button class="osc-btn active">TRI</button>
+              <button class="osc-btn">SAW</button>
+              <button class="osc-btn">SQR</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Mix</span>
+            <input type="range" class="horizontal-slider" value="50">
+            <span class="slider-value">50%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Detune</span>
+            <input type="range" class="horizontal-slider" value="0">
+            <span class="slider-value">0¢</span>
+          </div>
+        </div>
+
+        <div class="osc-group">
+          <div class="osc-row">
+            <span class="osc-label">OSC 3</span>
+            <div class="oscillator-select">
+              <button class="osc-btn active">SIN</button>
+              <button class="osc-btn">TRI</button>
+              <button class="osc-btn">SAW</button>
+              <button class="osc-btn">SQR</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Mix</span>
+            <input type="range" class="horizontal-slider" value="30">
+            <span class="slider-value">30%</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-label">Detune</span>
+            <input type="range" class="horizontal-slider" value="20">
+            <span class="slider-value">−20¢</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="panel-label">Filter & Envelope</span>
+      <div class="screw screw-tl" style="width:8px;height:8px;"></div>
+      <div class="screw screw-tr" style="width:8px;height:8px;"></div>
+      
+      <div class="bottom-row">
+        <div class="filter-section">
+          <div class="knob-row">
+            <span class="knob-label">Cutoff</span>
+            <div class="knob" style="transform:rotate(45deg);"></div>
+            <span class="value">8.0kHz</span>
+          </div>
+          <div class="knob-row">
+            <span class="knob-label">Res</span>
+            <div class="knob" style="transform:rotate(-20deg);"></div>
+            <span class="value">2.0</span>
+          </div>
+        </div>
+
+        <div class="envelope-section">
+          <div class="envelope-control">
+            <label>Attack</label>
+            <input type="range" value="30">
+            <span class="value">30ms</span>
+          </div>
+          <div class="envelope-control">
+            <label>Decay</label>
+            <input type="range" value="50">
+            <span class="value">200ms</span>
+          </div>
+          <div class="envelope-control">
+            <label>Sustain</label>
+            <input type="range" value="70">
+            <span class="value">70%</span>
+          </div>
+          <div class="envelope-control">
+            <label>Release</label>
+            <input type="range" value="40">
+            <span class="value">300ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <span class="panel-label">Status</span>
+      <div class="screw screw-tl" style="width:8px;height:8px;"></div>
+      <div class="screw screw-tr" style="width:8px;height:8px;"></div>
+      
+      <div class="active-notes" style="padding-top:8px;">
+        <div class="notes-section">
+          <h3>Active Notes</h3>
+          <div>
+            <span class="note-tag"><span class="note-name">E4</span><span class="note-cents">+0.0¢</span></span>
+            <span class="note-tag"><span class="note-name">C4</span><span class="note-cents">−12.0¢</span></span>
+            <span class="note-tag"><span class="note-name">G3</span><span class="note-cents">+5.2¢</span></span>
+          </div>
+        </div>
+        <div class="notes-section">
+          <h3>Controls</h3>
+          <div class="controls-help">
+            A-Z = notes &nbsp;|&nbsp; SPACE = sustain<br>
+            SHIFT = accent &nbsp;|&nbsp; . = +1 &nbsp;|&nbsp; , = −1<br>
+            ENTER = noise &nbsp;|&nbsp; / = arpeggiator
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
