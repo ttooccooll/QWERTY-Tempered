@@ -154,59 +154,7 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 10px rgba(255,107,53,0.3);
-    }
-
-    .scale-visualization {
-      background: var(--surface);
-      padding: 20px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-    }
-
-    .scale-visualization h3 {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .scale-bar {
-      display: flex;
-      gap: 2px;
-      height: 40px;
-    }
-
-    .scale-degree {
-      flex: 1;
-      background: var(--key-black);
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 150ms ease-out;
-      position: relative;
-    }
-
-    .scale-degree.active {
-      background: var(--secondary);
-      box-shadow: 0 0 10px rgba(0,212,170,0.5);
-    }
-
-    .scale-degree:hover {
-      background: var(--key-white);
-    }
-
-    .scale-degree.active:hover {
-      background: var(--secondary);
-    }
-
-    .scale-degree .degree-label {
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 8px;
-      color: var(--text-muted);
-    }
+}
 
 .key-display {
       min-height: 26px;
@@ -395,19 +343,31 @@
     .envelope-control input[type="range"] {
       writing-mode: vertical-lr;
       direction: rtl;
-      width: 8px;
+      width: 6px;
       height: 80px;
       appearance: none;
       background: var(--key-black);
-      border-radius: 4px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
     }
 
     .envelope-control input[type="range"]::-webkit-slider-thumb {
       appearance: none;
-      width: 16px;
-      height: 16px;
+      width: 10px;
+      height: 10px;
       background: var(--primary);
       border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .envelope-control input[type="range"]::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: none;
       cursor: pointer;
     }
 
@@ -415,7 +375,31 @@
       writing-mode: horizontal-tb !important;
       direction: ltr !important;
       width: 80px !important;
-      height: 8px !important;
+      height: 4px !important;
+      appearance: none;
+      background: var(--key-black);
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .horizontal-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .horizontal-slider::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
     }
 
     .envelope-control .value {
@@ -578,7 +562,7 @@
           </div>
           <div style="display:flex;align-items:center;gap:4px">
             <label style="font-size:9px">Vol</label>
-            <input type="range" id="volume" min="0" max="100" value="70" style="width:60px;height:4px">
+            <input type="range" id="volume" min="0" max="100" value="70" style="width:60px" class="horizontal-slider">
           </div>
         </div>
         <label style="margin-top:8px">Arpeggiator</label>
@@ -601,7 +585,7 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:2px">
               <label style="font-size:8px">Rate</label>
-              <input type="range" id="arpRate" min="50" max="500" value="150" style="width:60px;height:4px">
+              <input type="range" id="arpRate" min="50" max="500" value="150" style="width:60px" class="horizontal-slider">
               <span class="value" id="arpRateVal" style="font-size:9px">150ms</span>
             </div>
           </div>
@@ -623,13 +607,13 @@
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Vol</span>
-              <input type="range" id="oscMix" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscMixVal" style="font-size:10px">100%</span>
+              <input type="range" id="oscMix" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscMixVal" style="font-size:9px;min-width:28px;text-align:right">100%</span>
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Tune</span>
-              <input type="range" id="oscDetune" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscDetuneVal" style="font-size:10px">0¢</span>
+              <input type="range" id="oscDetune" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscDetuneVal" style="font-size:9px;min-width:28px;text-align:right">0¢</span>
             </div>
           </div>
 
@@ -643,13 +627,13 @@
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Vol</span>
-              <input type="range" id="oscMix2" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscMix2Val" style="font-size:10px">100%</span>
+              <input type="range" id="oscMix2" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscMix2Val" style="font-size:9px;min-width:28px;text-align:right">100%</span>
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Tune</span>
-              <input type="range" id="oscDetune2" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscDetune2Val" style="font-size:10px">0¢</span>
+              <input type="range" id="oscDetune2" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscDetune2Val" style="font-size:9px;min-width:28px;text-align:right">0¢</span>
             </div>
           </div>
 
@@ -663,13 +647,13 @@
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Vol</span>
-              <input type="range" id="oscMix3" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscMix3Val" style="font-size:10px">100%</span>
+              <input type="range" id="oscMix3" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscMix3Val" style="font-size:9px;min-width:28px;text-align:right">100%</span>
             </div>
             <div style="display:flex;align-items:center;gap:4px">
               <span style="font-size:9px">Tune</span>
-              <input type="range" id="oscDetune3" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
-              <span class="value" id="oscDetune3Val" style="font-size:10px">0¢</span>
+              <input type="range" id="oscDetune3" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important">
+              <span class="value" id="oscDetune3Val" style="font-size:9px;min-width:28px;text-align:right">0¢</span>
             </div>
           </div>
         </div>
@@ -680,12 +664,12 @@
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
           <div class="envelope-control">
             <label>Cutoff</label>
-            <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider" style="width:80px!important;height:6px!important">
+            <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider" style="width:80px!important">
             <span class="value" id="filterCutoffVal">10kHz</span>
           </div>
           <div class="envelope-control">
             <label>Res</label>
-            <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider" style="width:80px!important;height:6px!important">
+            <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider" style="width:80px!important">
             <span class="value" id="filterQVal">1</span>
           </div>
         </div>
