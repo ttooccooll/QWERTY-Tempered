@@ -571,6 +571,12 @@
         <label>Arpeggiator</label>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:9px">Base</span>
+            <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01" style="width:60px">
+            <span style="font-size:9px;margin-left:8px">Vol</span>
+            <input type="range" id="volume" min="0" max="100" value="70" style="width:50px;height:4px">
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
             <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
             <div class="oscillator-select" id="arpDirSelect" style="display:flex;gap:2px">
               <button class="osc-btn active" data-dir="up">Up</button>
@@ -600,14 +606,6 @@
       <div class="control-group">
         <label>Oscillators</label>
         <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-          <div style="display:flex;gap:8px;align-items:center">
-            <span style="font-size:9px;width:36px">BASE</span>
-            <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01" style="width:70px">
-            <div style="display:flex;align-items:center;gap:4px;margin-left:8px">
-              <span style="font-size:9px">VOL</span>
-              <input type="range" id="volume" min="0" max="100" value="70" class="horizontal-slider" style="width:50px!important;height:6px!important">
-            </div>
-          </div>
           <div style="display:flex;gap:8px;align-items:center">
             <span style="font-size:9px;width:36px">OSC1</span>
             <div class="oscillator-select" data-osc="1">
