@@ -239,6 +239,30 @@
       border: 1px solid var(--border);
     }
 
+    .keyboard-arpeggiator-container {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .arpeggiator-panel {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      min-width: 160px;
+    }
+
+    .arpeggiator-panel label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
     .octave-display {
       text-align: center;
       font-size: 14px;
@@ -537,9 +561,39 @@
   <button class="start-btn" id="startBtn">Click to Start Audio</button>
 
   <div class="main-panel hidden" id="mainPanel">
-    <div class="keyboard">
-      <div class="key-display" id="keyDisplay"></div>
-      <div class="piano" id="piano"></div>
+    <div class="keyboard-arpeggiator-container">
+      <div class="keyboard">
+        <div class="key-display" id="keyDisplay"></div>
+        <div class="piano" id="piano"></div>
+      </div>
+
+      <div class="arpeggiator-panel">
+        <label>Arpeggiator</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
+            <div class="oscillator-select" id="arpDirSelect" style="display:flex;gap:2px">
+              <button class="osc-btn active" data-dir="up">Up</button>
+              <button class="osc-btn" data-dir="down">Dn</button>
+              <button class="osc-btn" data-dir="updown">UD</button>
+              <button class="osc-btn" data-dir="random">Rnd</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="oscillator-select" id="arpOctaveSelect" style="display:flex;gap:2px">
+              <button class="osc-btn active" data-oct="0">0</button>
+              <button class="osc-btn" data-oct="1">+1</button>
+              <button class="osc-btn" data-oct="-1">-1</button>
+              <button class="osc-btn" data-oct="2">±1</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <label style="font-size:8px">Rate</label>
+              <input type="range" id="arpRate" min="50" max="500" value="150" style="width:60px;height:4px">
+              <span class="value" id="arpRateVal" style="font-size:9px">150ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="envelope-controls">
@@ -660,44 +714,6 @@
           </div>
         </div>
       </div>
-
-      <div class="control-group">
-        <label>Arpeggiator</label>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px">Arp</label>
-              <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px">Dir</label>
-              <div class="oscillator-select" id="arpDirSelect">
-                <button class="osc-btn active" data-dir="up">Up</button>
-                <button class="osc-btn" data-dir="down">Dn</button>
-                <button class="osc-btn" data-dir="updown">UD</button>
-                <button class="osc-btn" data-dir="random">Rnd</button>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px">Oct</label>
-              <div class="oscillator-select" id="arpOctaveSelect">
-                <button class="osc-btn active" data-oct="0">0</button>
-                <button class="osc-btn" data-oct="1">+1</button>
-                <button class="osc-btn" data-oct="-1">-1</button>
-                <button class="osc-btn" data-oct="2">±1</button>
-              </div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px">Rate</label>
-              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider" style="width:60px">
-              <span class="value" id="arpRateVal" style="font-size:9px">150ms</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="active-notes">
       <div style="display:flex;gap:24px;flex:1">
