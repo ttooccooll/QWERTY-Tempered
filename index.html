@@ -6,7 +6,7 @@
   <title>QWERTY Tempered</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -15,16 +15,22 @@
     }
 
     :root {
-      --bg: #0a0a0f;
-      --surface: #14141f;
-      --primary: #ff6b35;
-      --secondary: #00d4aa;
-      --tertiary: #a855f7;
-      --text: #e8e8e8;
-      --text-muted: #6b7280;
-      --key-white: #2a2a3a;
-      --key-black: #1a1a24;
-      --border: #2a2a3a;
+      --bg: #1a1612;
+      --surface: #252019;
+      --panel: #332e22;
+      --panel-border: #4a3f2e;
+      --primary: #e8a935;
+      --primary-glow: #f5c155;
+      --secondary: #cd7f32;
+      --tertiary: #8b6914;
+      --text: #f5f0e1;
+      --text-muted: #a89878;
+      --text-dark: #2d2418;
+      --key-cream: #b8b090;
+      --key-cream-shadow: #988868;
+      --key-active: #e8a935;
+      --key-active-shadow: #c48a1f;
+      --border: #4a3f2e;
     }
 
     body {
@@ -37,9 +43,8 @@
       align-items: center;
       padding: 24px;
       background-image:
-        linear-gradient(rgba(255,107,53,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,107,53,0.02) 1px, transparent 1px);
-      background-size: 32px 32px;
+        radial-gradient(ellipse at 50% 0%, rgba(232,169,53,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(205,127,50,0.04) 0%, transparent 40%);
     }
 
     header {
@@ -48,26 +53,29 @@
     }
 
     h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 4px;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: 6px;
       color: var(--primary);
       text-transform: uppercase;
       margin-bottom: 8px;
-      text-shadow: 0 0 20px rgba(255,107,53,0.4);
+      text-shadow: 
+        0 0 40px rgba(232,169,53,0.6),
+        0 2px 0 rgba(0,0,0,0.3);
     }
 
     .subtitle {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       text-transform: uppercase;
     }
 
     .mobile-warning {
       font-size: 9px;
-      color: var(--bg);
-      background: var(--tertiary);
+      color: var(--text-dark);
+      background: var(--secondary);
       padding: 4px 12px;
       border-radius: 12px;
       margin-top: 10px;
@@ -83,23 +91,29 @@
 
     .start-btn {
       background: var(--primary);
-      color: var(--bg);
+      color: var(--text-dark);
       border: none;
-      padding: 12px 32px;
+      padding: 14px 40px;
       font-family: inherit;
       font-size: 14px;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 6px;
       margin-bottom: 24px;
       transition: all 150ms ease-out;
+      box-shadow: 0 4px 0 var(--key-active-shadow), 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .start-btn:hover {
-      box-shadow: 0 0 20px rgba(255,107,53,0.6);
+      box-shadow: 0 0 25px rgba(232,169,53,0.6), 0 4px 0 var(--key-active-shadow), 0 4px 12px rgba(0,0,0,0.4);
       transform: translateY(-2px);
+    }
+
+    .start-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--key-active-shadow), 0 2px 8px rgba(0,0,0,0.3);
     }
 
     .hidden {
@@ -122,10 +136,13 @@
     }
 
     .control-group {
-      background: var(--surface);
+      background: var(--panel);
       padding: 14px 16px;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 2px 10px rgba(0,0,0,0.3);
     }
 
     .control-group label {
@@ -133,8 +150,9 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--text-muted);
+      color: var(--secondary);
       margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .control-group select,
@@ -153,10 +171,27 @@
     .control-group input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(255,107,53,0.3);
+      box-shadow: 0 0 10px rgba(232,169,53,0.3);
 }
 
-.key-display {
+.keyboard-wrapper {
+      position: relative;
+      background: var(--panel);
+      padding: 24px 20px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .keyboard-wrapper .panel-label {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+    }
+
+    .key-display {
       min-height: 26px;
       display: flex;
       align-items: center;
@@ -167,6 +202,7 @@
     }
 
     .key-display .key-char {
+      font-family: 'Special Elite', 'Courier New', monospace;
       font-size: 14px;
       font-weight: 500;
       color: var(--primary);
@@ -181,24 +217,31 @@
     }
 
     .keyboard {
-      background: var(--surface);
+      background: var(--panel);
       padding: 18px;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 4px 16px rgba(0,0,0,0.4);
     }
 
     .keyboard-arpeggiator-container {
       display: flex;
       gap: 16px;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: center;
     }
 
     .arpeggiator-panel {
-      background: var(--surface);
+      background: var(--panel);
       padding: 14px;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px solid var(--border);
       min-width: 160px;
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 2px 10px rgba(0,0,0,0.3);
     }
 
     .arpeggiator-panel label {
@@ -206,8 +249,9 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--text-muted);
+      color: var(--secondary);
       margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .octave-display {
@@ -219,6 +263,7 @@
       min-height: 20px;
       text-transform: uppercase;
       letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(232,169,53,0.4);
     }
 
     .piano {
@@ -252,38 +297,50 @@
     }
 
     .sustain-key {
-      min-width: 280px;
-      width: 280px;
+      min-width: 260px;
+      width: 260px;
+      height: 36px;
     }
 
     .modifier-key {
-      min-width: 36px;
-      width: 36px;
+      min-width: 40px;
+      height: 36px;
     }
 
     .key {
       cursor: pointer;
-      transition: all 80ms ease-out;
+      transition: all 60ms ease-out;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 4px;
-      min-width: 36px;
-      height: 36px;
-      background: var(--key-white);
-      border: 1px solid var(--border);
-      border-radius: 4px;
+      justify-content: flex-end;
+      padding: 4px 0 6px 0;
+      min-width: 38px;
+      height: 40px;
+      background: linear-gradient(180deg, #c8bca8 0%, #b8b090 50%, #a89878 100%);
+      border: 1px solid #988868;
+      border-radius: 3px 3px 2px 2px;
+      color: var(--text-dark);
+      box-shadow: 
+        0 3px 0 #786848,
+        0 3px 6px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.4),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
     }
 
     .key:hover {
-      background: #3a3a4a;
+      background: linear-gradient(180deg, #d0c4a8 0%, #c0b490 50%, #b0a478 100%);
     }
 
     .key.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 0 15px rgba(255,107,53,0.6);
+      background: linear-gradient(180deg, var(--primary-glow) 0%, var(--primary) 30%, var(--key-active-shadow) 100%);
+      border-color: var(--key-active-shadow);
+      box-shadow: 
+        0 2px 0 var(--key-active-shadow),
+        0 0 20px rgba(232,169,53,0.7),
+        0 0 40px rgba(232,169,53,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      transform: translateY(2px);
     }
 
     .key.in-scale {
@@ -291,27 +348,33 @@
     }
 
     .key.in-scale:not(.active) {
-      background: #1f2a25;
+      background: #3a3525;
     }
 
     .key-label {
-      font-size: 9px;
-      color: var(--text-muted);
-      font-weight: 500;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 10px;
+      color: var(--text-dark);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.5);
     }
 
     .key.active .key-label {
-      color: var(--bg);
+      color: var(--text-dark);
     }
 
     .key-extra {
+      font-family: 'Special Elite', 'Courier New', monospace;
       font-size: 7px;
-      color: var(--tertiary);
-      margin-top: 2px;
+      color: var(--secondary);
+      margin-top: 3px;
+      font-weight: 500;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.5);
     }
 
     .key.active .key-extra {
-      color: var(--bg);
+      color: #4a3510;
     }
 
     .octave-gap {
@@ -337,7 +400,8 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--text-muted);
+      color: var(--secondary);
+      font-weight: 600;
     }
 
     .envelope-control input[type="range"] {
@@ -346,70 +410,75 @@
       width: 6px;
       height: 80px;
       appearance: none;
-      background: var(--key-black);
+      background: var(--bg);
       border-radius: 3px;
-      border: none;
+      border: 1px solid var(--border);
       cursor: pointer;
     }
 
     .envelope-control input[type="range"]::-webkit-slider-thumb {
       appearance: none;
-      width: 10px;
-      height: 10px;
-      background: var(--primary);
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
       border-radius: 50%;
-      border: none;
+      border: 2px solid var(--key-cream);
       cursor: pointer;
+      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .envelope-control input[type="range"]::-moz-range-thumb {
-      width: 10px;
-      height: 10px;
-      background: var(--primary);
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
       border-radius: 50%;
-      border: none;
+      border: 2px solid var(--key-cream);
       cursor: pointer;
+      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .horizontal-slider {
       writing-mode: horizontal-tb !important;
       direction: ltr !important;
       width: 80px !important;
-      height: 4px !important;
+      height: 6px !important;
       appearance: none;
-      background: var(--key-black);
-      border-radius: 2px;
-      border: none;
+      background: var(--bg);
+      border-radius: 3px;
+      border: 1px solid var(--border);
       cursor: pointer;
     }
 
     .horizontal-slider::-webkit-slider-thumb {
       appearance: none;
-      width: 10px;
-      height: 10px;
-      background: var(--primary);
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
       border-radius: 50%;
-      border: none;
+      border: 2px solid var(--key-cream);
       cursor: pointer;
+      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .horizontal-slider::-moz-range-thumb {
-      width: 10px;
-      height: 10px;
-      background: var(--primary);
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
       border-radius: 50%;
-      border: none;
+      border: 2px solid var(--key-cream);
       cursor: pointer;
+      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .envelope-control .value {
       font-size: 12px;
       color: var(--secondary);
+      font-weight: 600;
     }
 
     .oscillator-select {
       display: flex;
-      gap: 8px;
+      gap: 4px;
     }
 
     .oscillator-row {
@@ -424,7 +493,7 @@
     }
 
     .osc-btn {
-      background: var(--key-black);
+      background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text-muted);
       padding: 8px 12px;
@@ -433,32 +502,40 @@
       cursor: pointer;
       border-radius: 4px;
       transition: all 150ms ease-out;
+      font-weight: 500;
     }
 
     .osc-btn:hover {
-      border-color: var(--text-muted);
+      border-color: var(--secondary);
+      color: var(--text);
     }
 
     .osc-btn.active {
       background: var(--primary);
-      color: var(--bg);
+      color: var(--text-dark);
       border-color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(232,169,53,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     .active-notes {
-      background: var(--surface);
+      background: var(--panel);
       padding: 14px;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px solid var(--border);
       min-height: 60px;
+      box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 2px 10px rgba(0,0,0,0.3);
     }
 
     .active-notes h3 {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--text-muted);
+      color: var(--secondary);
       margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .notes-display {
@@ -472,8 +549,8 @@
     }
 
     .note-tag {
-      background: var(--key-black);
-      padding: 3px 5px;
+      background: var(--surface);
+      padding: 3px 8px;
       border-radius: 3px;
       font-size: 9px;
       border: 1px solid var(--border);
@@ -490,6 +567,124 @@
       margin-left: 4px;
     }
 
+    .panel-label {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--panel);
+      padding: 2px 12px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--secondary);
+      font-weight: 600;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      z-index: 1;
+    }
+
+    .screw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(135deg, #5a4a38 0%, #2a2015 100%);
+      border-radius: 50%;
+      box-shadow: 
+        inset 0 1px 2px rgba(0,0,0,0.5),
+        0 1px 0 rgba(255,255,255,0.05);
+      z-index: 2;
+    }
+
+    .screw::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 1px;
+      background: #1a1510;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .screw-tl { top: 6px; left: 6px; }
+    .screw-tr { top: 6px; right: 6px; }
+    .screw-bl { bottom: 6px; left: 6px; }
+    .screw-br { bottom: 6px; right: 6px; }
+
+    .screw-sm {
+      width: 8px;
+      height: 8px;
+    }
+
+    .knob {
+      width: 50px;
+      height: 50px;
+      background: conic-gradient(from 225deg, #1a1510 0%, var(--panel) 25%, #3a3025 50%, var(--panel) 75%, #1a1510 100%);
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      box-shadow: 
+        0 3px 8px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(0,0,0,0.3),
+        inset 0 -1px 0 rgba(255,255,255,0.03);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .knob::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 2px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 1px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 4px var(--primary);
+    }
+
+    .knob-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .knob-label {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .knob-value {
+      font-size: 10px;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+      color: var(--text);
+    }
+
+    .hidden-slider {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .control-group {
+      position: relative;
+      padding-top: 20px;
+    }
+
     .keyboard-hint {
       font-size: 10px;
       color: var(--text-muted);
@@ -498,7 +693,7 @@
     }
 
     .keyboard-hint kbd {
-      background: var(--key-black);
+      background: var(--surface);
       padding: 2px 6px;
       border-radius: 2px;
       border: 1px solid var(--border);
@@ -549,45 +744,34 @@
 
   <div class="main-panel hidden" id="mainPanel">
     <div class="keyboard-arpeggiator-container">
-      <div class="keyboard">
-        <div class="key-display" id="keyDisplay"></div>
-        <div class="piano" id="piano"></div>
+      <div class="keyboard-wrapper">
+        <span class="panel-label">Keyboard</span>
+        <div class="screw screw-tl"></div>
+        <div class="screw screw-tr"></div>
+        <div class="screw screw-bl"></div>
+        <div class="screw screw-br"></div>
+        <div class="keyboard">
+          <div class="key-display" id="keyDisplay"></div>
+          <div class="piano" id="piano"></div>
+        </div>
       </div>
 
-      <div class="arpeggiator-panel">
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;align-items:center;gap:4px">
-            <label style="font-size:9px">Base</label>
-            <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01" style="width:60px">
+      <div class="control-group" style="min-width:140px;">
+        <span class="panel-label">Master</span>
+        <div class="screw screw-tl screw-sm"></div>
+        <div class="screw screw-tr screw-sm"></div>
+        <div class="screw screw-bl screw-sm"></div>
+        <div class="screw screw-br screw-sm"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:8px">
+          <div class="knob-container">
+            <div class="knob" id="volumeKnob" style="transform:rotate(100deg);"></div>
+            <input type="range" id="volume" min="0" max="100" value="70" class="hidden-slider">
+            <span class="knob-label">Volume</span>
+            <span class="knob-value" id="volumeVal">70%</span>
           </div>
-          <div style="display:flex;align-items:center;gap:4px">
-            <label style="font-size:9px">Vol</label>
-            <input type="range" id="volume" min="0" max="100" value="70" style="width:60px" class="horizontal-slider">
-          </div>
-        </div>
-        <label style="margin-top:8px">Arpeggiator</label>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
-            <div class="oscillator-select" id="arpDirSelect" style="display:flex;gap:2px">
-              <button class="osc-btn active" data-dir="up">Up</button>
-              <button class="osc-btn" data-dir="down">Dn</button>
-              <button class="osc-btn" data-dir="updown">UD</button>
-              <button class="osc-btn" data-dir="random">Rnd</button>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <div class="oscillator-select" id="arpOctaveSelect" style="display:flex;gap:2px">
-              <button class="osc-btn active" data-oct="0">0</button>
-              <button class="osc-btn" data-oct="1">+1</button>
-              <button class="osc-btn" data-oct="-1">-1</button>
-              <button class="osc-btn" data-oct="2">±1</button>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:2px">
-              <label style="font-size:8px">Rate</label>
-              <input type="range" id="arpRate" min="50" max="500" value="150" style="width:60px" class="horizontal-slider">
-              <span class="value" id="arpRateVal" style="font-size:9px">150ms</span>
-            </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+            <span class="knob-label">Base Freq</span>
+            <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01" style="width:70px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:3px;font-size:11px;text-align:center;">
           </div>
         </div>
       </div>
@@ -595,7 +779,11 @@
 
     <div class="envelope-controls">
       <div class="control-group">
-        <label>Oscillators</label>
+        <span class="panel-label">Oscillators</span>
+        <div class="screw screw-tl screw-sm"></div>
+        <div class="screw screw-tr screw-sm"></div>
+        <div class="screw screw-bl screw-sm"></div>
+        <div class="screw screw-br screw-sm"></div>
         <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
           <div style="display:flex;gap:8px;align-items:center">
             <span style="font-size:9px;width:36px">OSC1</span>
@@ -660,23 +848,11 @@
       </div>
 
       <div class="control-group">
-        <label>Filter</label>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-          <div class="envelope-control">
-            <label>Cutoff</label>
-            <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider" style="width:80px!important">
-            <span class="value" id="filterCutoffVal">10kHz</span>
-          </div>
-          <div class="envelope-control">
-            <label>Res</label>
-            <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider" style="width:80px!important">
-            <span class="value" id="filterQVal">1</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label>Envelope</label>
+        <span class="panel-label">Envelope</span>
+        <div class="screw screw-tl screw-sm"></div>
+        <div class="screw screw-tr screw-sm"></div>
+        <div class="screw screw-bl screw-sm"></div>
+        <div class="screw screw-br screw-sm"></div>
         <div style="display:flex;gap:12px;margin-top:8px">
           <div class="envelope-control">
             <label>Attack</label>
@@ -704,7 +880,65 @@
         </div>
       </div>
 
-    <div class="active-notes">
+      <div class="control-group">
+        <span class="panel-label">Filter</span>
+        <div class="screw screw-tl screw-sm"></div>
+        <div class="screw screw-tr screw-sm"></div>
+        <div class="screw screw-bl screw-sm"></div>
+        <div class="screw screw-br screw-sm"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="envelope-control">
+            <label>Cutoff</label>
+            <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider" style="width:80px!important">
+            <span class="value" id="filterCutoffVal">10kHz</span>
+          </div>
+          <div class="envelope-control">
+            <label>Res</label>
+            <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider" style="width:80px!important">
+            <span class="value" id="filterQVal">1</span>
+          </div>
+        </div>
+      </div>
+
+    <div class="arpeggiator-panel" style="position:relative;padding-top:20px;">
+      <span class="panel-label">Arpeggiator</span>
+      <div class="screw screw-tl screw-sm"></div>
+      <div class="screw screw-tr screw-sm"></div>
+      <div class="screw screw-bl screw-sm"></div>
+      <div class="screw screw-br screw-sm"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
+          <div class="oscillator-select" id="arpDirSelect" style="display:flex;gap:2px">
+            <button class="osc-btn active" data-dir="up">Up</button>
+            <button class="osc-btn" data-dir="down">Dn</button>
+            <button class="osc-btn" data-dir="updown">UD</button>
+            <button class="osc-btn" data-dir="random">Rnd</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="oscillator-select" id="arpOctaveSelect" style="display:flex;gap:2px">
+            <button class="osc-btn active" data-oct="0">0</button>
+            <button class="osc-btn" data-oct="1">+1</button>
+            <button class="osc-btn" data-oct="-1">-1</button>
+            <button class="osc-btn" data-oct="2">±1</button>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:8px;color:var(--text-muted)">Rate</span>
+            <div class="knob" id="arpRateKnob" style="width:40px;height:40px;transform:rotate(40deg);"></div>
+            <input type="range" id="arpRate" min="50" max="500" value="150" class="hidden-slider">
+            <span class="value" id="arpRateVal" style="font-size:9px;">150ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="active-notes" style="position:relative;padding-top:20px;">
+      <span class="panel-label">Status</span>
+      <div class="screw screw-tl screw-sm"></div>
+      <div class="screw screw-tr screw-sm"></div>
+      <div class="screw screw-bl screw-sm"></div>
+      <div class="screw screw-br screw-sm"></div>
       <div style="display:flex;gap:24px;flex:1">
         <div style="flex:0.7">
           <h3>Active Notes</h3>
@@ -1307,6 +1541,9 @@
       if (masterGain) {
         masterGain.gain.value = e.target.value / 100;
       }
+      document.getElementById('volumeVal').textContent = e.target.value + '%';
+      const rotateDeg = -135 + (e.target.value / 100) * 270;
+      document.getElementById('volumeKnob').style.transform = 'rotate(' + rotateDeg + 'deg)';
     });
 
     document.querySelectorAll('.osc-btn').forEach(btn => {
@@ -1400,6 +1637,7 @@
         document.querySelectorAll('#arpDirSelect .osc-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         arpDirection = btn.dataset.dir;
+        arpIndex = 0;
       });
     });
 
@@ -1408,6 +1646,7 @@
         document.querySelectorAll('#arpOctaveSelect .osc-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         arpOctave = parseInt(btn.dataset.oct);
+        arpIndex = 0;
       });
     });
 
@@ -1526,6 +1765,81 @@
       document.getElementById('startBtn').classList.add('hidden');
       document.getElementById('mainPanel').classList.remove('hidden');
       buildKeyboard();
+      const initialVol = document.getElementById('volume').value;
+      const rotateDeg = -135 + (initialVol / 100) * 270;
+      document.getElementById('volumeKnob').style.transform = 'rotate(' + rotateDeg + 'deg)';
+
+      const volumeKnob = document.getElementById('volumeKnob');
+      const volumeSlider = document.getElementById('volume');
+      let isDragging = false;
+      let startY = 0;
+      let startValue = 0;
+
+      volumeKnob.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        startValue = parseInt(volumeSlider.value);
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaY = startY - e.clientY;
+        const sensitivity = 0.5;
+        let newValue = startValue + deltaY * sensitivity;
+        if (newValue < 0) newValue = 0;
+        if (newValue > 100) newValue = 100;
+        volumeSlider.value = Math.round(newValue);
+        volumeSlider.dispatchEvent(new Event('input'));
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      const arpRateKnob = document.getElementById('arpRateKnob');
+      const arpRateSlider = document.getElementById('arpRate');
+      let isDraggingArp = false;
+      let startYArp = 0;
+      let startValueArp = 0;
+
+      const initArpRateKnob = () => {
+        const rate = parseInt(arpRateSlider.value);
+        const deg = 135 - ((rate - 50) / 450 * 270);
+        arpRateKnob.style.transform = 'rotate(' + deg + 'deg)';
+      };
+
+      arpRateSlider.addEventListener('input', () => {
+        const rate = parseInt(arpRateSlider.value);
+        document.getElementById('arpRateVal').textContent = rate + 'ms';
+        const deg = 135 - ((rate - 50) / 450 * 270);
+        arpRateKnob.style.transform = 'rotate(' + deg + 'deg)';
+        arpRate = rate;
+      });
+
+      arpRateKnob.addEventListener('mousedown', (e) => {
+        isDraggingArp = true;
+        startYArp = e.clientY;
+        startValueArp = parseInt(arpRateSlider.value);
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDraggingArp) return;
+        const deltaY = startYArp - e.clientY;
+        const sensitivity = 2;
+        let newValue = startValueArp - deltaY * sensitivity;
+        if (newValue < 50) newValue = 50;
+        if (newValue > 500) newValue = 500;
+        arpRateSlider.value = Math.round(newValue);
+        arpRateSlider.dispatchEvent(new Event('input'));
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingArp = false;
+      });
+
+      initArpRateKnob();
     });
   </script>
 </body>
