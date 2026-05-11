@@ -537,18 +537,6 @@
   <button class="start-btn" id="startBtn">Click to Start Audio</button>
 
   <div class="main-panel hidden" id="mainPanel">
-    <div class="controls-row">
-      <div class="control-group">
-        <label>Base Note (Hz)</label>
-        <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01">
-      </div>
-
-      <div class="control-group">
-        <label>Master Volume</label>
-        <input type="range" id="volume" min="0" max="100" value="70">
-      </div>
-    </div>
-
     <div class="keyboard">
       <div class="key-display" id="keyDisplay"></div>
       <div class="piano" id="piano"></div>
@@ -556,85 +544,158 @@
 
     <div class="envelope-controls">
       <div class="control-group">
-        <div class="oscillator-stack">
-          <div>
-            <label style="font-size:9px">OSC1</label>
+        <label>Oscillators</label>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:9px;width:36px">BASE</span>
+            <input type="number" id="baseFreq" value="130.81" min="20" max="2000" step="0.01" style="width:70px">
+            <div style="display:flex;align-items:center;gap:4px;margin-left:8px">
+              <span style="font-size:9px">VOL</span>
+              <input type="range" id="volume" min="0" max="100" value="70" class="horizontal-slider" style="width:50px!important;height:6px!important">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:9px;width:36px">OSC1</span>
             <div class="oscillator-select" data-osc="1">
               <button class="osc-btn" data-type="sine">Sine</button>
-              <button class="osc-btn active" data-type="triangle">Tri</button>
-              <button class="osc-btn" data-type="sawtooth">Saw</button>
-              <button class="osc-btn" data-type="square">Sqr</button>
-            </div>
-          </div>
-          <div>
-            <label style="font-size:9px">OSC2</label>
-            <div class="oscillator-select" data-osc="2" id="oscSelect2">
-              <button class="osc-btn active" data-type="sine">Sine</button>
               <button class="osc-btn" data-type="triangle">Tri</button>
-              <button class="osc-btn" data-type="sawtooth">Saw</button>
+              <button class="osc-btn active" data-type="sawtooth">Saw</button>
               <button class="osc-btn" data-type="square">Sqr</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Vol</span>
+              <input type="range" id="oscMix" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscMixVal" style="font-size:10px">100%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Tune</span>
+              <input type="range" id="oscDetune" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscDetuneVal" style="font-size:10px">0¢</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:9px;width:36px">OSC2</span>
+            <div class="oscillator-select" data-osc="2" id="oscSelect2">
+              <button class="osc-btn" data-type="sine">Sine</button>
+              <button class="osc-btn" data-type="triangle">Tri</button>
+              <button class="osc-btn active" data-type="sawtooth">Saw</button>
+              <button class="osc-btn" data-type="square">Sqr</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Vol</span>
+              <input type="range" id="oscMix2" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscMix2Val" style="font-size:10px">100%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Tune</span>
+              <input type="range" id="oscDetune2" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscDetune2Val" style="font-size:10px">0¢</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:9px;width:36px">OSC3</span>
+            <div class="oscillator-select" data-osc="3" id="oscSelect3">
+              <button class="osc-btn" data-type="sine">Sine</button>
+              <button class="osc-btn" data-type="triangle">Tri</button>
+              <button class="osc-btn active" data-type="sawtooth">Saw</button>
+              <button class="osc-btn" data-type="square">Sqr</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Vol</span>
+              <input type="range" id="oscMix3" min="0" max="100" value="100" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscMix3Val" style="font-size:10px">100%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="font-size:9px">Tune</span>
+              <input type="range" id="oscDetune3" min="0" max="50" value="0" class="horizontal-slider" style="width:50px!important;height:6px!important">
+              <span class="value" id="oscDetune3Val" style="font-size:10px">0¢</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="envelope-control">
-          <label>Mix</label>
-          <input type="range" id="oscMix" min="0" max="100" value="0" class="horizontal-slider">
-          <span class="value" id="oscMixVal">0%</span>
-        </div>
-
-        <div class="envelope-control">
-          <label>Detune</label>
-          <input type="range" id="oscDetune" min="0" max="50" value="0" class="horizontal-slider">
-          <span class="value" id="oscDetuneVal">0¢</span>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="envelope-control">
-          <label>Filter</label>
-          <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider">
-          <span class="value" id="filterCutoffVal">10kHz</span>
-        </div>
-
-        <div class="envelope-control">
-          <label>Resonance</label>
-          <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider">
-          <span class="value" id="filterQVal">1</span>
+      <div class="control-group">
+        <label>Filter</label>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="envelope-control">
+            <label>Cutoff</label>
+            <input type="range" id="filterCutoff" min="100" max="10000" value="10000" class="horizontal-slider" style="width:80px!important;height:6px!important">
+            <span class="value" id="filterCutoffVal">10kHz</span>
+          </div>
+          <div class="envelope-control">
+            <label>Res</label>
+            <input type="range" id="filterQ" min="0" max="20" value="1" class="horizontal-slider" style="width:80px!important;height:6px!important">
+            <span class="value" id="filterQVal">1</span>
+          </div>
         </div>
       </div>
 
-      <div class="envelope-control">
-        <label>Attack</label>
-        <input type="range" id="attack" min="1" max="1000" value="50">
-        <span class="value" id="attackVal">50ms</span>
+      <div class="control-group">
+        <label>Envelope</label>
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <div class="envelope-control">
+            <label>Attack</label>
+            <input type="range" id="attack" min="1" max="1000" value="50">
+            <span class="value" id="attackVal">50ms</span>
+          </div>
+
+          <div class="envelope-control">
+            <label>Decay</label>
+            <input type="range" id="decay" min="1" max="1000" value="200">
+            <span class="value" id="decayVal">200ms</span>
+          </div>
+
+          <div class="envelope-control">
+            <label>Sustain</label>
+            <input type="range" id="sustain" min="0" max="100" value="70">
+            <span class="value" id="sustainVal">70%</span>
+          </div>
+
+          <div class="envelope-control">
+            <label>Release</label>
+            <input type="range" id="release" min="1" max="1000" value="300">
+            <span class="value" id="releaseVal">300ms</span>
+          </div>
+        </div>
       </div>
 
-      <div class="envelope-control">
-        <label>Decay</label>
-        <input type="range" id="decay" min="1" max="1000" value="200">
-        <span class="value" id="decayVal">200ms</span>
-      </div>
-
-      <div class="envelope-control">
-        <label>Sustain</label>
-        <input type="range" id="sustain" min="0" max="100" value="70">
-        <span class="value" id="sustainVal">70%</span>
-      </div>
-
-      <div class="envelope-control">
-        <label>Release</label>
-        <input type="range" id="release" min="1" max="1000" value="300">
-        <span class="value" id="releaseVal">300ms</span>
-      </div>
-
-      <div class="envelope-control">
-        <label>Arp</label>
-        <button class="osc-btn" id="arpToggle" style="min-width:60px">OFF</button>
-        <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider" style="margin-top:8px">
-        <span class="value" id="arpRateVal">150ms</span>
+      <div class="control-group">
+        <label>Arpeggiator</label>
+        <div style="display:flex;flex-direction:column;gap:4px;margin-top:8px">
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <label style="font-size:9px">Arp</label>
+              <button class="osc-btn" id="arpToggle" style="min-width:48px">OFF</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <label style="font-size:9px">Dir</label>
+              <div class="oscillator-select" id="arpDirSelect">
+                <button class="osc-btn active" data-dir="up">Up</button>
+                <button class="osc-btn" data-dir="down">Dn</button>
+                <button class="osc-btn" data-dir="updown">UD</button>
+                <button class="osc-btn" data-dir="random">Rnd</button>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <label style="font-size:9px">Oct</label>
+              <div class="oscillator-select" id="arpOctaveSelect">
+                <button class="osc-btn active" data-oct="0">0</button>
+                <button class="osc-btn" data-oct="1">+1</button>
+                <button class="osc-btn" data-oct="-1">-1</button>
+                <button class="osc-btn" data-oct="2">±1</button>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <label style="font-size:9px">Rate</label>
+              <input type="range" id="arpRate" min="50" max="500" value="150" class="horizontal-slider" style="width:60px">
+              <span class="value" id="arpRateVal" style="font-size:9px">150ms</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -672,12 +733,17 @@
     let audioContext = null;
     let masterGain = null;
     let activeVoices = new Map();
-    let oscType = 'triangle';
-    let oscType2 = 'sine';
-    let oscMix = 0;
+    let oscType = 'sawtooth';
+    let oscType2 = 'sawtooth';
+    let oscType3 = 'sawtooth';
+    let oscMix = 1;
+    let oscMix2 = 1;
+    let oscMix3 = 1;
+    let oscDetune = 0;
+    let oscDetune2 = 0;
+    let oscDetune3 = 0;
     let filterCutoff = 10000;
     let filterQ = 1;
-    let oscDetune = 0;
     let filterNode = null;
     let isSustainPedalDown = false;
     let isAccent = false;
@@ -692,6 +758,8 @@
     let arpInterval = null;
     let arpHeldKeys = new Set();
     let arpIndex = 0;
+    let arpDirection = 'up';
+    let arpOctave = 0;
 
     const settings = {
       attack: 50,
@@ -837,10 +905,46 @@
         return;
       }
       const sortedKeys = Array.from(arpHeldKeys).sort((a, b) => a - b);
-      const noteIndex = sortedKeys[arpIndex % sortedKeys.length];
+      let noteIndex;
+
+      if (arpDirection === 'random') {
+        const currentIdx = sortedKeys.indexOf(noteIndex);
+        let nextIdx;
+        do {
+          nextIdx = Math.floor(Math.random() * sortedKeys.length);
+        } while (nextIdx === currentIdx && sortedKeys.length > 1);
+        noteIndex = sortedKeys[nextIdx];
+      } else if (arpDirection === 'updown') {
+        if (sortedKeys.length === 1) {
+          noteIndex = sortedKeys[0];
+        } else {
+          const cycleSize = sortedKeys.length * 2 - 2;
+          const idx = arpIndex % cycleSize;
+          if (idx < sortedKeys.length) {
+            noteIndex = sortedKeys[idx];
+          } else {
+            noteIndex = sortedKeys[cycleSize - idx];
+          }
+        }
+      } else if (arpDirection === 'down') {
+        noteIndex = sortedKeys[(sortedKeys.length - 1) - (arpIndex % sortedKeys.length)];
+      } else {
+        noteIndex = sortedKeys[arpIndex % sortedKeys.length];
+      }
+
+      let octaveOffset = 0;
+      if (arpOctave === 1) {
+        octaveOffset = 25;
+      } else if (arpOctave === -1) {
+        octaveOffset = -25;
+      } else if (arpOctave === 2) {
+        octaveOffset = (arpIndex % 2 === 0) ? 25 : -25;
+      }
+
+      const finalNoteIndex = noteIndex + octaveOffset;
 
       for (const idx of activeVoices.keys()) {
-        const { osc, osc2, gainNode, gainNode2 } = activeVoices.get(idx);
+        const { osc, osc2, osc3, gainNode, gainNode2, gainNode3 } = activeVoices.get(idx);
         const now = audioContext.currentTime;
         gainNode.gain.cancelScheduledValues(now);
         gainNode.gain.setValueAtTime(gainNode.gain.value, now);
@@ -850,15 +954,22 @@
           gainNode2.gain.setValueAtTime(gainNode2.gain.value, now);
           gainNode2.gain.linearRampToValueAtTime(0, now + 0.02);
         }
+        if (gainNode3) {
+          gainNode3.gain.cancelScheduledValues(now);
+          gainNode3.gain.setValueAtTime(gainNode3.gain.value, now);
+          gainNode3.gain.linearRampToValueAtTime(0, now + 0.02);
+        }
         setTimeout(() => {
           try { osc.stop(); osc.disconnect(); gainNode.disconnect(); } catch(e) {}
           if (osc2) { try { osc2.stop(); osc2.disconnect(); } catch(e) {} }
           if (gainNode2) { try { gainNode2.disconnect(); } catch(e) {} }
+          if (osc3) { try { osc3.stop(); osc3.disconnect(); } catch(e) {} }
+          if (gainNode3) { try { gainNode3.disconnect(); } catch(e) {} }
         }, 30);
         activeVoices.delete(idx);
       }
 
-      playNote(noteIndex);
+      playNote(finalNoteIndex);
       arpIndex++;
       arpInterval = setTimeout(runArpeggiator, arpRate);
     }
@@ -876,25 +987,37 @@
       const osc = audioContext.createOscillator();
       osc.type = oscType;
       osc.frequency.value = freq;
+      osc.detune.value = oscDetune;
 
       const osc2 = audioContext.createOscillator();
       osc2.type = oscType2;
       osc2.frequency.value = freq;
-      osc2.detune.value = oscDetune;
+      osc2.detune.value = oscDetune2;
+
+      const osc3 = audioContext.createOscillator();
+      osc3.type = oscType3;
+      osc3.frequency.value = freq;
+      osc3.detune.value = oscDetune3;
 
       const gainNode = audioContext.createGain();
-      gainNode.gain.value = oscMix;
+      const osc1Gain = oscMix2 === 0 && oscMix3 === 0 ? oscMix : oscMix / 3;
+      gainNode.gain.value = osc1Gain;
 
       const gainNode2 = audioContext.createGain();
-      gainNode2.gain.value = 1 - oscMix;
+      gainNode2.gain.value = oscMix2 / 3;
+
+      const gainNode3 = audioContext.createGain();
+      gainNode3.gain.value = oscMix3 / 3;
 
       const mixNode = audioContext.createGain();
       mixNode.gain.value = 1;
 
       osc.connect(gainNode);
       osc2.connect(gainNode2);
+      osc3.connect(gainNode3);
       gainNode.connect(mixNode);
       gainNode2.connect(mixNode);
+      gainNode3.connect(mixNode);
       mixNode.connect(masterGain);
 
       const accentMultiplier = isAccent ? 1.5 : 1;
@@ -908,8 +1031,9 @@
 
       osc.start(now);
       osc2.start(now);
+      osc3.start(now);
 
-      activeVoices.set(noteIndex, { osc, osc2, gainNode, gainNode2, freq });
+      activeVoices.set(noteIndex, { osc, osc2, osc3, gainNode, gainNode2, gainNode3, freq });
       updateActiveNotesDisplay();
     }
 
@@ -920,7 +1044,7 @@
         return;
       }
 
-      const { osc, osc2, gainNode, gainNode2 } = activeVoices.get(noteIndex);
+      const { osc, osc2, osc3, gainNode, gainNode2, gainNode3 } = activeVoices.get(noteIndex);
       const now = audioContext.currentTime;
 
       gainNode.gain.cancelScheduledValues(now);
@@ -933,6 +1057,12 @@
         gainNode2.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
       }
 
+      if (gainNode3) {
+        gainNode3.gain.cancelScheduledValues(now);
+        gainNode3.gain.setValueAtTime(gainNode3.gain.value, now);
+        gainNode3.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+      }
+
       setTimeout(() => {
         osc.stop();
         osc.disconnect();
@@ -941,6 +1071,11 @@
           osc2.stop();
           osc2.disconnect();
           gainNode2.disconnect();
+        }
+        if (osc3) {
+          osc3.stop();
+          osc3.disconnect();
+          gainNode3.disconnect();
         }
       }, settings.release + 50);
 
@@ -961,6 +1096,12 @@
           voice.gainNode2.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
         }
 
+        if (voice.gainNode3) {
+          voice.gainNode3.gain.cancelScheduledValues(now);
+          voice.gainNode3.gain.setValueAtTime(voice.gainNode3.gain.value, now);
+          voice.gainNode3.gain.linearRampToValueAtTime(0, now + settings.release / 1000);
+        }
+
         setTimeout(() => {
           voice.osc.stop();
           voice.osc.disconnect();
@@ -971,6 +1112,13 @@
           }
           if (voice.gainNode2) {
             voice.gainNode2.disconnect();
+          }
+          if (voice.osc3) {
+            voice.osc3.stop();
+            voice.osc3.disconnect();
+          }
+          if (voice.gainNode3) {
+            voice.gainNode3.disconnect();
           }
         }, settings.release + 50);
       });
@@ -988,7 +1136,7 @@
       display.innerHTML = Array.from(activeVoices.entries()).map(([noteIndex, voice]) => {
         const exactFreq = voice.freq;
         const cents = 1200 * Math.log2(exactFreq / baseFreq);
-        const name = alphabeticalNoteNames[noteIndex];
+        const name = alphabeticalNoteNames[noteIndex] || '??';
 
         return `<span class="note-tag">
           <span class="note-name">${name}</span>
@@ -1089,6 +1237,13 @@
       noteLabel.textContent = 'SUSTAIN';
       spaceKey.appendChild(noteLabel);
 
+      
+      
+      spaceRow.innerHTML = '';
+
+      const commaKey = createModifierKey(',', '▼', '-1', 'keyDown');
+      const periodKey = createModifierKey('.', '▲', '+1', 'keyUp');
+
       spaceKey.addEventListener('mousedown', () => {
         isSustainPedalDown = true;
         spaceKey.classList.add('active');
@@ -1105,11 +1260,6 @@
           releaseAllNotes();
         }
       });
-      
-      spaceRow.innerHTML = '';
-
-      const commaKey = createModifierKey(',', '▼', '-1', 'keyDown');
-      const periodKey = createModifierKey('.', '▲', '+1', 'keyUp');
       
       spaceRow.innerHTML = '';
       spaceRow.appendChild(spaceKey);
@@ -1177,6 +1327,8 @@
         btn.classList.add('active');
         if (oscNum === '2') {
           oscType2 = btn.dataset.type;
+        } else if (oscNum === '3') {
+          oscType3 = btn.dataset.type;
         } else {
           oscType = btn.dataset.type;
         }
@@ -1186,6 +1338,21 @@
     document.getElementById('oscMix').addEventListener('input', (e) => {
       oscMix = e.target.value / 100;
       document.getElementById('oscMixVal').textContent = e.target.value + '%';
+    });
+
+    document.getElementById('oscMix2').addEventListener('input', (e) => {
+      oscMix2 = e.target.value / 100;
+      document.getElementById('oscMix2Val').textContent = e.target.value + '%';
+    });
+
+    document.getElementById('oscMix3').addEventListener('input', (e) => {
+      oscMix3 = e.target.value / 100;
+      document.getElementById('oscMix3Val').textContent = e.target.value + '%';
+    });
+
+    document.getElementById('oscDetune3').addEventListener('input', (e) => {
+      oscDetune3 = parseInt(e.target.value);
+      document.getElementById('oscDetune3Val').textContent = oscDetune3 + '¢';
     });
 
     document.getElementById('filterCutoff').addEventListener('input', (e) => {
@@ -1204,6 +1371,11 @@
     document.getElementById('oscDetune').addEventListener('input', (e) => {
       oscDetune = parseInt(e.target.value);
       document.getElementById('oscDetuneVal').textContent = oscDetune + '¢';
+    });
+
+    document.getElementById('oscDetune2').addEventListener('input', (e) => {
+      oscDetune2 = parseInt(e.target.value);
+      document.getElementById('oscDetune2Val').textContent = oscDetune2 + '¢';
     });
 
     ['attack', 'decay', 'sustain', 'release'].forEach(param => {
@@ -1231,6 +1403,22 @@
     document.getElementById('arpRate').addEventListener('input', (e) => {
       arpRate = parseInt(e.target.value);
       document.getElementById('arpRateVal').textContent = arpRate + 'ms';
+    });
+
+    document.querySelectorAll('#arpDirSelect .osc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#arpDirSelect .osc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        arpDirection = btn.dataset.dir;
+      });
+    });
+
+    document.querySelectorAll('#arpOctaveSelect .osc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#arpOctaveSelect .osc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        arpOctave = parseInt(btn.dataset.oct);
+      });
     });
 
     document.addEventListener('keydown', (e) => {
