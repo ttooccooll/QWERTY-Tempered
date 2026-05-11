@@ -777,6 +777,7 @@
     let arpIndex = 0;
     let arpDirection = 'up';
     let arpOctave = 0;
+    let arpPrevRandomIdx = -1;
 
     const settings = {
       attack: 50,
@@ -925,11 +926,11 @@
       let noteIndex;
 
       if (arpDirection === 'random') {
-        const currentIdx = sortedKeys.indexOf(noteIndex);
         let nextIdx;
         do {
           nextIdx = Math.floor(Math.random() * sortedKeys.length);
-        } while (nextIdx === currentIdx && sortedKeys.length > 1);
+        } while (nextIdx === arpPrevRandomIdx && sortedKeys.length > 1);
+        arpPrevRandomIdx = nextIdx;
         noteIndex = sortedKeys[nextIdx];
       } else if (arpDirection === 'updown') {
         if (sortedKeys.length === 1) {
