@@ -794,18 +794,7 @@
       'q': 'E4', 'w': 'F4', 'e': 'F#4', 'r': 'G4', 't': 'G#4', 'y': 'A4', 'u': 'A#4', 'i': 'B4', 'o': 'C5', 'p': 'C#5'
     };
 
-    function updateOctaveDisplay() {
-      const display = document.getElementById('octaveDisplay');
-      if (octaveShift === 0) {
-        display.textContent = '';
-      } else if (octaveShift === 12) {
-        display.textContent = '+1 octave';
-      } else if (octaveShift === -12) {
-        display.textContent = '-1 octave';
-      } else if (octaveShift === 24) {
-        display.textContent = '+2 octaves';
-      }
-    }
+    
 
     let isShiftHeld = false;
     function showKeyDisplay(char) {
@@ -1308,13 +1297,11 @@
           octaveShift = 12;
         }
         key.classList.add('active');
-        updateOctaveDisplay();
       };
 
       const handleModifierUp = () => {
         key.classList.remove('active');
         octaveShift = 0;
-        updateOctaveDisplay();
         releaseAllNotes();
       };
 
@@ -1461,14 +1448,12 @@
 
       if (e.key === '.') {
         octaveShift = 25;
-        updateOctaveDisplay();
         document.getElementById('keyUp')?.classList.add('active');
         return;
       }
 
       if (e.key === ',') {
         octaveShift = -25;
-        updateOctaveDisplay();
         document.getElementById('keyDown')?.classList.add('active');
         return;
       }
@@ -1524,7 +1509,6 @@
 
       if (e.key === '.' || e.key === ',') {
         octaveShift = 0;
-        updateOctaveDisplay();
         document.getElementById('keyUp')?.classList.remove('active');
         document.getElementById('keyDown')?.classList.remove('active');
         releaseAllNotes();
