@@ -1,25 +1,32 @@
 # QWERTY Tempered
 
-A web-based equal-tempered synthesizer using 26 alphabetic keys spanning exactly one octave with dual oscillators.
+A web-based equal-tempered synthesizer using 26 alphabetic keys spanning exactly one octave with three oscillators, filter, and arpeggiator.
 
 ## Features
 
 - **26 Keys**: All letter keys (Z to P) span exactly one octave
-- **Equal Temperament**: All notes equally spaced
-- **Dual Oscillators**: Two independent oscillators (OSC1 + OSC2)
-- **Mix Control**: Blend between oscillators with slider
+- **Equal Temperament**: 25 equal divisions per octave
+- **Three Oscillators**: OSC1, OSC2, OSC3 with independent waveform, volume, and detune
+- **Lowpass Filter**: Adjustable cutoff (100Hz-10kHz) and resonance
+- **ADSR Envelope**: Adjustable attack, decay, sustain, release
+- **Arpeggiator**: Toggle with `/`, direction (up/down/updown/random), octave range
 - **Octave Shift**: Hold `.` for +1 octave, `,` for -1 octave
 - **Sustain**: Hold spacebar
-- **ADSR Envelope**: Adjustable attack, decay, sustain, release
-- **Oscillators**: Sine, Triangle, Sawtooth, Square
+- **Accent**: Hold SHIFT for louder attack
+- **Noise**: Hold ENTER for white noise
+- **Oscillator Types**: Sine, Triangle, Sawtooth, Square
 
-## How to Use
+## Controls
 
-1. Click "Click to Start Audio"
-2. Press keys to play notes (QWERTY layout)
-3. Select waveforms for OSC1 and OSC2
-4. Use Mix slider to blend between oscillators
-5. Use envelope sliders to shape sound
+| Key | Action |
+|-----|--------|
+| A-Z | Play notes |
+| SPACE | Sustain |
+| SHIFT | Accent |
+| . | +1 octave |
+| , | -1 octave |
+| ENTER | Noise |
+| / | Toggle arpeggiator |
 
 ## Live Page
 
