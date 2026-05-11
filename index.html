@@ -484,7 +484,9 @@
     }
 
     #notesDisplay {
-      min-width: 180px;
+      min-width: 140px;
+      max-height: 80px;
+      overflow-y: auto;
     }
 
     .note-tag {
@@ -722,13 +724,13 @@
 
     <div class="active-notes">
       <div style="display:flex;gap:24px;flex:1">
-        <div style="flex:1">
+        <div style="flex:0.8">
           <h3>Active Notes</h3>
           <div class="notes-display" id="notesDisplay">
             <span class="note-tag" style="color: var(--text-muted);">No notes playing</span>
           </div>
         </div>
-        <div style="flex:1">
+        <div style="flex:1.2">
           <h3>Controls</h3>
           <div style="display:flex;gap:16px">
             <div class="notes-display">
