@@ -991,14 +991,15 @@
       osc3.detune.value = oscDetune3;
 
       const gainNode = audioContext.createGain();
-      const osc1Gain = oscMix2 === 0 && oscMix3 === 0 ? oscMix : oscMix / 3;
-      gainNode.gain.value = osc1Gain;
+      const oscCount = (oscMix > 0 ? 1 : 0) + (oscMix2 > 0 ? 1 : 0) + (oscMix3 > 0 ? 1 : 0);
+      const divisor = oscCount > 0 ? oscCount : 1;
+      gainNode.gain.value = oscMix / divisor;
 
       const gainNode2 = audioContext.createGain();
-      gainNode2.gain.value = oscMix2 / 3;
+      gainNode2.gain.value = oscMix2 / divisor;
 
       const gainNode3 = audioContext.createGain();
-      gainNode3.gain.value = oscMix3 / 3;
+      gainNode3.gain.value = oscMix3 / divisor;
 
       const mixNode = audioContext.createGain();
       mixNode.gain.value = 1;
@@ -1495,7 +1496,6 @@
         octaveShift = 0;
         document.getElementById('keyUp')?.classList.remove('active');
         document.getElementById('keyDown')?.classList.remove('active');
-        releaseAllNotes();
         return;
       }
 
