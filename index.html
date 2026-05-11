@@ -124,7 +124,7 @@
     .main-panel {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
       width: 100%;
       max-width: 900px;
     }
@@ -297,17 +297,6 @@
       margin-left: 80px;
     }
 
-    .sustain-key {
-      min-width: 260px;
-      width: 260px;
-      height: 36px;
-    }
-
-    .modifier-key {
-      min-width: 40px;
-      height: 36px;
-    }
-
     .key {
       cursor: pointer;
       transition: all 60ms ease-out;
@@ -371,7 +360,7 @@
       color: var(--secondary);
       margin-top: 3px;
       font-weight: 500;
-      text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+      text-shadow: 0 1px 0 rgba(0,0,0,1);
     }
 
     .key.active .key-extra {
@@ -385,7 +374,7 @@
 
     .envelope-controls {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
     }
@@ -452,23 +441,23 @@
 
     .horizontal-slider::-webkit-slider-thumb {
       appearance: none;
-      width: 14px;
-      height: 14px;
-      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
+      width: 6px;
+      height: 6px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 50%, var(--key-active) 100%);
       border-radius: 50%;
-      border: 2px solid var(--key-cream);
+      border: 2px solid black;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 0 4px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .horizontal-slider::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
-      background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 50%, var(--key-active-shadow) 100%);
+      width: 6px;
+      height: 6px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 50%, var(--key-active) 100%);
       border-radius: 50%;
-      border: 2px solid var(--key-cream);
+      border: 2px solid black;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 0 4px rgba(232,169,53,0.6), 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .envelope-control .value {
@@ -484,7 +473,7 @@
 
     .oscillator-row {
       display: flex;
-      gap: 16px;
+      gap: 12px;
     }
 
     .oscillator-stack {
